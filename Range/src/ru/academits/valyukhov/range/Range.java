@@ -10,17 +10,14 @@ public class Range {
     }
 
     public double getFrom() {
-
         return from;
     }
 
     public void setFrom(double from) {
-
         this.from = from;
     }
 
     public double getTo() {
-
         return to;
     }
 
@@ -29,12 +26,10 @@ public class Range {
     }
 
     public double getLength() {
-
         return to - from;
     }
 
     public boolean isInside(double number) {
-
         return number >= from && number <= to;
     }
 }
