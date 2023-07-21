@@ -18,7 +18,7 @@ public class RangeMain {
             System.out.println("Ошибка! Конечное число диапазона должно быть больше начального.");
         } else {
             Range range1 = new Range(from, to);
-            System.out.println("ПЕРВЫЙ диапазон: (" + range1.getFrom() + "; " + range1.getTo() + ")");
+            System.out.println("ПЕРВЫЙ диапазон: " + range1);
             System.out.println("Длина ПЕРВОГО диапазона: " + range1.getLength());
 
             System.out.printf("%nВведите вещественное число, входящее в указанный диапазон (от %f до %f): ", from, to);
@@ -63,7 +63,7 @@ public class RangeMain {
                 System.exit(0);
             } else {
                 Range range2 = new Range(from, to);
-                System.out.println("ВТОРОЙ диапазон: (" + range2.getFrom() + "; " + range2.getTo() + ")");
+                System.out.println("ВТОРОЙ диапазон: " + range2);
                 System.out.println();
 
                 // Пересечение двух интервалов.
