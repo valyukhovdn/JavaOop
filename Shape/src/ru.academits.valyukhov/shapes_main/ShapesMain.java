@@ -61,7 +61,7 @@ public class ShapesMain {
     }
 
     public static void main(String[] args) {
-        //  Инициализируем несколько фигур разных классов.
+        //  Инициализируем 4 пары фигур одного класса с РАЗНЫМИ значениями соответствующих полей:
         Circle circle1 = new Circle(7);
         Circle circle2 = new Circle(10.5);
         Rectangle rectangle1 = new Rectangle(8, 7);
@@ -82,6 +82,7 @@ public class ShapesMain {
         }
 
         System.out.println();
+
         //  Печатаем в консоль фигуру с максимальной ПЛОЩАДЬЮ.
         System.out.printf("Фигура с максимальной ПЛОЩАДЬЮ: %n" + maxAreaShape(shapes) + "%n");
         System.out.println();
@@ -91,16 +92,17 @@ public class ShapesMain {
         System.out.println();
 
         // Проверки
-        /*
+
         System.out.println("Проверка переопределения equals:");
         System.out.println();
-        System.out.println("Проверяем на равенство фигуры одного класса с РАЗНЫМИ значениями соответствующих полей");
-        System.out.println(circle1.equals(circle2));        //  false
-        System.out.println(rectangle1.equals(rectangle2));  //  false
-        System.out.println(square1.equals(square2));        //  false
-        System.out.println(triangle1.equals(triangle2));    //  false
+        System.out.println("Проверяем на равенство фигуры одного класса с РАЗНЫМИ значениями соответствующих полей:");
+        System.out.println("Равенство окружностей:     " + circle1.equals(circle2));        //  false
+        System.out.println("Равенство прямоугольников: " + rectangle1.equals(rectangle2));  //  false
+        System.out.println("Равенство квадратов:       " + square1.equals(square2));        //  false
+        System.out.println("Равенство треугольников:   " + triangle1.equals(triangle2));    //  false
         System.out.println();
 
+        //  Пары фигур одного класса с ОДИНАКОВЫМИ значениями соответствующих полей:
         Circle circle3 = new Circle(7);
         Circle circle4 = new Circle(7);
         Rectangle rectangle3 = new Rectangle(8, 7);
@@ -110,15 +112,14 @@ public class ShapesMain {
         Triangle triangle3 = new Triangle(2, 2, 6, 4, 15, 5);
         Triangle triangle4 = new Triangle(2, 2, 6, 4, 15, 5);
 
-        System.out.println();
-        System.out.println("Проверяем на равенство фигуры одного класса с ОДИНАКОВЫМИ значениями соответствующих полей");
-        System.out.println(circle3.equals(circle4));        //  true
-        System.out.println(rectangle3.equals(rectangle4));  //  true
-        System.out.println(square3.equals(square4));        //  true
-        System.out.println(triangle3.equals(triangle4));    //  true
+        System.out.println("Проверяем на равенство фигуры одного класса с ОДИНАКОВЫМИ значениями соответствующих полей:");
+        System.out.println("Равенство окружностей:     " + circle3.equals(circle4));        //  true
+        System.out.println("Равенство прямоугольников: " + rectangle3.equals(rectangle4));  //  true
+        System.out.println("Равенство квадратов:       " + square3.equals(square4));        //  true
+        System.out.println("Равенство треугольников:   " + triangle3.equals(triangle4));    //  true
         System.out.println();
 
-        System.out.println("Проверка переопределения hashCode:");
+        System.out.println("Проверка переопределения hashCode для пар однотипных фигур с РАЗНЫМИ значениями полей:");
         System.out.println(circle2.hashCode());
         System.out.println(circle3.hashCode());
         System.out.println(rectangle2.hashCode());
@@ -127,6 +128,17 @@ public class ShapesMain {
         System.out.println(square3.hashCode());
         System.out.println(triangle2.hashCode());
         System.out.println(triangle3.hashCode());
-         */
+        System.out.println();
+
+        System.out.println("Проверка переопределения hashCode для пар однотипных фигур с ОДИНАКОВЫМИ значениями полей:");
+        System.out.println(circle3.hashCode());
+        System.out.println(circle4.hashCode());
+        System.out.println(rectangle3.hashCode());
+        System.out.println(rectangle4.hashCode());
+        System.out.println(square3.hashCode());
+        System.out.println(square4.hashCode());
+        System.out.println(triangle3.hashCode());
+        System.out.println(triangle4.hashCode());
+        System.out.println();
     }
 }

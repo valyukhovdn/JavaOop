@@ -66,18 +66,22 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
+    @Override
     public double getWidth() {
         return Math.max(x1, Math.max(x2, x3)) - Math.min(x1, Math.min(x2, x3));
     }
 
+    @Override
     public double getHeight() {
         return Math.max(y1, Math.max(y2, y3)) - Math.min(y1, Math.min(y2, y3));
     }
 
+    @Override
     public double getArea() {
         return Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
     }
 
+    @Override
     public double getPerimeter() {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) +
                 Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2)) +
@@ -87,8 +91,7 @@ public class Triangle implements Shape {
     @Override
     public String toString() {
         return String.format("%-14s: x1 - %.2f, y1 - %.2f, x2 - %.2f, y2 - %.2f, x3 - %.2f, y3 - %.2f, площадь - %7.2f, " +
-                        "периметр - %7.2f;", shapeName, this.x1, this.y1, this.x2, this.y2, this.x3, this.y3,
-                getArea(), getPerimeter());
+                "периметр - %7.2f;", shapeName, x1, y1, x2, y2, x3, y3, getArea(), getPerimeter());
     }
 
     @Override
@@ -106,15 +109,11 @@ public class Triangle implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (hashCode() != o.hashCode()) {
-            return false;
-        }
-
         if (o == this) {
             return true;
         }
 
-        if (o.getClass() != getClass()) {
+        if (o == null || o.getClass() != getClass()) {
             return false;
         }
 

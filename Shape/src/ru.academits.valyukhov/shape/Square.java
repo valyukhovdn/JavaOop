@@ -16,18 +16,22 @@ public class Square implements Shape {
         this.sideLength = sideLength;
     }
 
+    @Override
     public double getWidth() {
         return sideLength;
     }
 
+    @Override
     public double getHeight() {
         return sideLength;
     }
 
+    @Override
     public double getArea() {
         return sideLength * sideLength;
     }
 
+    @Override
     public double getPerimeter() {
         return sideLength * 4;
     }
@@ -35,7 +39,7 @@ public class Square implements Shape {
     @Override
     public String toString() {
         return String.format("%-14s: длина стороны - %-49.2f, площадь - %7.2f, периметр - %7.2f;",
-                shapeName, this.sideLength, getArea(), getPerimeter());
+                shapeName, sideLength, getArea(), getPerimeter());
     }
 
     @Override
@@ -47,15 +51,11 @@ public class Square implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (hashCode() != o.hashCode()) {
-            return false;
-        }
-
         if (this == o) {
             return true;
         }
 
-        if (o.getClass() != getClass()) {
+        if (o == null || o.getClass() != getClass()) {
             return false;
         }
 

@@ -10,6 +10,7 @@ public class Rectangle implements Shape {
         this.height = height;
     }
 
+    @Override
     public double getWidth() {
         return width;
     }
@@ -18,6 +19,7 @@ public class Rectangle implements Shape {
         this.width = width;
     }
 
+    @Override
     public double getHeight() {
         return height;
     }
@@ -26,10 +28,12 @@ public class Rectangle implements Shape {
         this.height = height;
     }
 
+    @Override
     public double getArea() {
         return width * height;
     }
 
+    @Override
     public double getPerimeter() {
         return (width + height) * 2;
     }
@@ -37,7 +41,7 @@ public class Rectangle implements Shape {
     @Override
     public String toString() {
         return String.format("%-14s: ширина - %-7.2f, высота - %-38.2f, площадь - %7.2f, периметр - %7.2f;",
-                shapeName, this.width, this.height, getArea(), getPerimeter());
+                shapeName, width, height, getArea(), getPerimeter());
     }
 
 
@@ -52,15 +56,11 @@ public class Rectangle implements Shape {
 
     @Override
     public boolean equals(Object o) {
-        if (hashCode() != o.hashCode()) {
-            return false;
-        }
-
         if (o == this) {
             return true;
         }
 
-        if (o.getClass() != getClass()) {
+        if (o == null || o.getClass() != getClass()) {
             return false;
         }
 
