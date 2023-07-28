@@ -1,5 +1,7 @@
 package ru.academits.valyukhov.range;
 
+import java.util.Arrays;
+
 public class Range {
     private double from;
     private double to;
@@ -38,89 +40,49 @@ public class Range {
         return "(" + from + "; " + to + ")";
     }
 
-    public static void printResult(Range[] range) {
-        System.out.print("[");
-
-        int i = 0;
-
-        for (Range e : range) {
-            if (i == 1) {
-                System.out.print(", ");
-            }
-
-            System.out.print(e);
-
-            ++i;
-
-        }
-
-        System.out.println("]");
+    public static void print(Range[] ranges) {
+        System.out.println(Arrays.toString(ranges));
     }
 
-
-    //  Определение интервала-пересечения двух интервалов.
-    public Range[] getIntersection(Range range) {
-        if (this.to <= range.from || range.to <= this.from) {  //  Проверка на отсутствие пересечений.
-            return new Range[]{null};
+    //  Определение диапазона-пересечения двух интервалов.
+    public Range getIntersection(Range range) {
+        if (to <= range.from || range.to <= from) {  //  Проверка на отсутствие пересечений.
+            return null;
         }
 
-        if (range.from <= this.from && this.to <= range.to) {  //  Проверяем, входит ли 1-й интервал во 2-й.
-            return new Range[]{new Range(this.from, this.to)};             // Новый объект с диапазоном range1
-        }
-
-        if (this.from <= range.from && range.to <= this.to) {  //  Проверяем, входит ли 2-й интервал в 1-й.
-            return new Range[]{new Range(range.from, range.to)};             // Новый объект с диапазоном range2
-        }
-
-        if (this.from <= range.from) {  // Проверяем, какой интервал начинается раньше.
-            return new Range[]{new Range(range.from, this.to)};
-        }
-
-        return new Range[]{new Range(this.from, range.to)};
+        return new Range(Math.max(from, range.from), Math.min(to, range.to));
     }
 
-    //  Определение объединения двух интервалов.
+    //  Определение объединения двух диапазонов.
     public Range[] getUnion(Range range) {
-        if (this.to < range.from || range.to < this.from) {  //  Проверка на отсутствие пересечений.
+        if (to < range.from || range.to < from) {  //  Проверка на отсутствие пересечений.
             return new Range[]{this, range};
         }
 
-        if (range.from <= this.from && this.to <= range.to) {  //  Проверяем, входит ли 1-й интервал во 2-й.
-            return new Range[]{range};
-        }
-
-        if (this.from <= range.from && range.to <= this.to) {  //  Проверяем, входит ли 2-й интервал в 1-й.
-            return new Range[]{this};
-        }
-
-        if (this.from <= range.from) {  // Проверяем, какой интервал начинается раньше.
-            return new Range[]{new Range(this.from, range.to)};
-        }
-
-        return new Range[]{new Range(range.from, this.to)};
+        return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
     }
 
-    //  Определение разности между первым и вторым интервалом.
+    //  Определение разности между первым и вторым диапазоном.
     public Range[] getDifference(Range range) {
-        if (this.to <= range.from || range.to <= this.from) {  //  Проверка на отсутствие пересечений.
-            return new Range[]{this};
+        if (to <= range.from || range.to <= from) {  //  Проверка на отсутствие пересечений.
+            return new Range[]{new Range(from, to)};
         }
 
-        if (range.from <= this.from && this.to <= range.to) {  //  Проверяем, входит ли 1-й интервал во 2-й.
+        if (range.from <= from && to <= range.to) {  //  Проверяем, входит ли 1-й диапазон во 2-й.
             return new Range[]{};
         }
 
-        if (this.from <= range.from && range.to <= this.to) {  //  Проверяем, входит ли 2-й интервал в 1-й.
+        if (from <= range.from && range.to <= to) {  //  Проверяем, входит ли 2-й диапазон в 1-й.
             return new Range[]{
-                    new Range(this.from, range.from),
-                    new Range(range.to, this.to)
+                    new Range(from, range.from),
+                    new Range(range.to, to)
             };
         }
 
-        if (this.from <= range.from) {  // Проверяем, какой интервал начинается раньше.
-            return new Range[]{new Range(this.from, range.from)};
+        if (from <= range.from) {  // Проверяем, какой диапазон начинается раньше.
+            return new Range[]{new Range(from, range.from)};
         }
 
-        return new Range[]{new Range(range.to, this.to)};
+        return new Range[]{new Range(range.to, to)};
     }
 }
