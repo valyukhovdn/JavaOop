@@ -2,6 +2,7 @@ package ru.academits.valyukhov.range_main;
 
 import ru.academits.valyukhov.range.Range;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class RangeMain {
@@ -84,23 +85,21 @@ public class RangeMain {
 
         if (union.length == 1) {
             System.out.print("Объединением ПЕРВОГО и ВТОРОГО диапазонов является диапазон: ");
-            Range.print(union);
+            System.out.println(Arrays.toString(union));
         } else {
             System.out.print("Объединением ПЕРВОГО и ВТОРОГО диапазонов являются 2 диапазона: ");
-            Range.print(union);
+            System.out.println(Arrays.toString(union));
         }
 
         //  Разность между первым и вторым интервалом.
         Range[] difference = range1.getDifference(range2);
 
-        if (difference.length == 0) {
-            System.out.println("Разность ПЕРВОГО и ВТОРОГО диапазонов равна: 0");
-        } else if (difference.length == 1) {
-            System.out.print("Разностью ПЕРВОГО и ВТОРОГО диапазонов является диапазон: ");
-            Range.print(difference);
-        } else {
+        if (difference.length == 2) {
             System.out.print("Разностью ПЕРВОГО и ВТОРОГО диапазонов являются 2 диапазона: ");
-            Range.print(difference);
+            System.out.println(Arrays.toString(difference));
+        } else {
+            System.out.print("Разностью ПЕРВОГО и ВТОРОГО диапазонов является диапазон: ");
+            System.out.println(Arrays.toString(difference));
         }
     }
 }
