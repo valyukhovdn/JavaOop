@@ -1,7 +1,6 @@
-package ru.academits.valyukhov.shape;
+package ru.academits.valyukhov.shapes;
 
 public class Rectangle implements Shape {
-    private static final String shapeName = "Прямоугольник";
     private double width;
     private double height;
 
@@ -41,9 +40,8 @@ public class Rectangle implements Shape {
     @Override
     public String toString() {
         return String.format("%-14s: ширина - %-7.2f, высота - %-38.2f, площадь - %7.2f, периметр - %7.2f;",
-                shapeName, width, height, getArea(), getPerimeter());
+                "Прямоугольник", width, height, getArea(), getPerimeter());
     }
-
 
     @Override
     public int hashCode() {

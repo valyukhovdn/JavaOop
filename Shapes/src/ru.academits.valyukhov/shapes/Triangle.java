@@ -1,7 +1,6 @@
-package ru.academits.valyukhov.shape;
+package ru.academits.valyukhov.shapes;
 
 public class Triangle implements Shape {
-    private static final String shapeName = "Треугольник";
     private double x1;
     private double y1;
     private double x2;
@@ -81,17 +80,21 @@ public class Triangle implements Shape {
         return Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
     }
 
+    public double getSideLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+    }
+
     @Override
     public double getPerimeter() {
-        return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) +
-                Math.sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2)) +
-                Math.sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1));
+        return getSideLength(x1, y1, x2, y2)
+                + getSideLength(x2, y2, x3, y3)
+                + getSideLength(x3, y3, x1, y1);
     }
 
     @Override
     public String toString() {
-        return String.format("%-14s: x1 - %.2f, y1 - %.2f, x2 - %.2f, y2 - %.2f, x3 - %.2f, y3 - %.2f, площадь - %7.2f, " +
-                "периметр - %7.2f;", shapeName, x1, y1, x2, y2, x3, y3, getArea(), getPerimeter());
+        return String.format("%-14s: (%.2f; %.2f), (%.2f; %.2f), (%.2f; %.2f) %-23s, площадь - %7.2f, "
+                + "периметр - %7.2f;", "Треугольник", x1, y1, x2, y2, x3, y3, "", getArea(), getPerimeter());
     }
 
     @Override
@@ -119,7 +122,8 @@ public class Triangle implements Shape {
 
         Triangle triangle = (Triangle) o;
 
-        return x1 == triangle.x1 && y1 == triangle.y1 && x2 == triangle.x2 && y2 == triangle.y2 &&
-                x3 == triangle.x3 && y3 == triangle.y3;
+        return x1 == triangle.x1 && y1 == triangle.y1
+                && x2 == triangle.x2 && y2 == triangle.y2
+                && x3 == triangle.x3 && y3 == triangle.y3;
     }
 }

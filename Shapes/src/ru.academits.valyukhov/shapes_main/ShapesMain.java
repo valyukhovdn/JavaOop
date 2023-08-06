@@ -1,62 +1,49 @@
 package ru.academits.valyukhov.shapes_main;
 
-import ru.academits.valyukhov.shape.*;
+import ru.academits.valyukhov.shapes.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-//  Создаём класс компаратора для сортировки массива фигур по возрастанию ПЛОЩАДЕЙ ч/з Arrays.sort.
-class ShapeAreaComparator implements Comparator<Shape> {
-    @Override
-    public int compare(Shape s1, Shape s2) {
-        if ((s1.getArea() - s2.getArea()) > 0) {
-            return 1;
-        }
-
-        if ((s1.getArea() - s2.getArea()) < 0) {
-            return -1;
-        }
-
-        return 0;
-    }
-}
-
-//  Создаём класс компаратора для сортировки массива фигур по возрастанию ПЕРИМЕТРОВ ч/з Arrays.sort.
-class ShapePerimetrComparator implements Comparator<Shape> {
-    @Override
-    public int compare(Shape s1, Shape s2) {
-        if ((s1.getPerimeter() - s2.getPerimeter() > 0)) {
-            return 1;
-        }
-
-        if ((s1.getPerimeter() - s2.getPerimeter()) < 0) {
-            return -1;
-        }
-
-        return 0;
-    }
-}
-
 public class ShapesMain {
-    private static Shape maxAreaShape(Shape[] shapes) {
-        //  Создаём экземпляр компаратора для сортировки массива фигур по возрастанию ПЛОЩАДЕЙ ч/з Arrays.sort.
-        ShapeAreaComparator shapeAreaComparator = new ShapeAreaComparator();
+    private static Shape getMaxAreaShape(Shape[] shapes) {
+        if (shapes.length == 0) {
+            throw new NullPointerException("ОШИБКА: Вычислить фигуру с наибольшей площадью невозможно, "
+                    + "т.к.переданный массив фигур пуст!");
+        }
 
         //  Сортируем массив фигур по возрастанию ПЛОЩАДЕЙ.
-        Arrays.sort(shapes, shapeAreaComparator);
+        Arrays.sort(shapes, new Comparator<Shape>() {
+            @Override
+            public int compare(Shape shape1, Shape shape2) {
+                return Double.compare(shape1.getArea(), shape2.getArea());
+            }
+        });
 
         // Возвращаем фигуру с самой большой ПЛОЩАДЬЮ (последняя в массиве).
         return shapes[shapes.length - 1];
     }
 
-    private static Shape secondPerimetrShape(Shape[] shapes) {
-        //  Создаём экземпляр компаратора для сортировки массива фигур по возрастанию ПЕРИМЕТРОВ ч/з Arrays.sort.
-        ShapePerimetrComparator shapePerimetrComparator = new ShapePerimetrComparator();
+    private static Shape getSecondPerimeterShape(Shape[] shapes) {
+        if (shapes.length == 0) {
+            throw new NullPointerException("ОШИБКА: Вычислить фигуру со вторым по величине периметром невозможно, "
+                    + "т.к.переданный массив фигур пуст!");
+        }
+
+        if (shapes.length == 1) {
+            throw new NullPointerException("ОШИБКА: Вычислить фигуру со вторым по величине периметром невозможно, "
+                    + "т.к.переданный массив фигур содержит только один объект!");
+        }
 
         //  Сортируем массив фигур по возрастанию ПЕРИМЕТРОВ.
-        Arrays.sort(shapes, shapePerimetrComparator);
+        Arrays.sort(shapes, new Comparator<Shape>() {
+            @Override
+            public int compare(Shape shape1, Shape shape2) {
+                return Double.compare(shape1.getPerimeter(), shape2.getPerimeter());
+            }
+        });
 
-        // Возвращаем фигуру с самым большим ПЕРИМЕТРОМ (предпоследняя в массиве).
+        // Возвращаем фигуру со вторым по величине ПЕРИМЕТРОМ (предпоследняя в массиве).
         return shapes[shapes.length - 2];
     }
 
@@ -84,15 +71,16 @@ public class ShapesMain {
         System.out.println();
 
         //  Печатаем в консоль фигуру с максимальной ПЛОЩАДЬЮ.
-        System.out.printf("Фигура с максимальной ПЛОЩАДЬЮ: %n" + maxAreaShape(shapes) + "%n");
+        System.out.println("Фигура с максимальной ПЛОЩАДЬЮ:");
+        System.out.println(getMaxAreaShape(shapes));
         System.out.println();
 
         //  Печатаем в консоль фигуру со вторым по величине ПЕРИМЕТРОМ.
-        System.out.printf("Фигура со вторым по величине ПЕРИМЕТРОМ: %n" + secondPerimetrShape(shapes) + "%n");
+        System.out.println("Фигура со вторым по величине ПЕРИМЕТРОМ:");
+        System.out.println(getSecondPerimeterShape(shapes));
         System.out.println();
 
         // Проверки
-
         System.out.println("Проверка переопределения equals:");
         System.out.println();
         System.out.println("Проверяем на равенство фигуры одного класса с РАЗНЫМИ значениями соответствующих полей:");

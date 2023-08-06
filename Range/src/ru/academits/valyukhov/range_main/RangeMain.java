@@ -85,21 +85,21 @@ public class RangeMain {
 
         if (union.length == 1) {
             System.out.print("Объединением ПЕРВОГО и ВТОРОГО диапазонов является диапазон: ");
-            System.out.println(Arrays.toString(union));
         } else {
             System.out.print("Объединением ПЕРВОГО и ВТОРОГО диапазонов являются 2 диапазона: ");
-            System.out.println(Arrays.toString(union));
         }
+
+        System.out.println(Arrays.toString(union));
 
         //  Разность между первым и вторым интервалом.
         Range[] difference = range1.getDifference(range2);
 
         if (difference.length == 2) {
             System.out.print("Разностью ПЕРВОГО и ВТОРОГО диапазонов являются 2 диапазона: ");
-            System.out.println(Arrays.toString(difference));
         } else {
             System.out.print("Разностью ПЕРВОГО и ВТОРОГО диапазонов является диапазон: ");
-            System.out.println(Arrays.toString(difference));
         }
+
+        System.out.println(Arrays.toString(difference));
     }
 }

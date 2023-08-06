@@ -1,4 +1,4 @@
-package ru.academits.valyukhov.shape;
+package ru.academits.valyukhov.shapes;
 
 public interface Shape {
     double getWidth();

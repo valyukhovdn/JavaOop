@@ -1,7 +1,6 @@
-package ru.academits.valyukhov.shape;
+package ru.academits.valyukhov.shapes;
 
 public class Square implements Shape {
-    private static final String shapeName = "Квадрат";
     private double sideLength;
 
     public Square(double sideLength) {
@@ -39,7 +38,7 @@ public class Square implements Shape {
     @Override
     public String toString() {
         return String.format("%-14s: длина стороны - %-49.2f, площадь - %7.2f, периметр - %7.2f;",
-                shapeName, sideLength, getArea(), getPerimeter());
+                "Квадрат", sideLength, getArea(), getPerimeter());
     }
 
     @Override
