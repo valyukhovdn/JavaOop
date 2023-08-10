@@ -40,6 +40,14 @@ public class Vector {
         System.arraycopy(elements, 0, this.elements, 0, Math.min(this.elements.length, elements.length));
     }
 
+    public double[] getElements() {
+        return elements;
+    }
+
+    public void setElements(double[] elements) {
+        this.elements = elements;
+    }
+
     public double getComponent(int index) {    //  Получение одной компоненты вектора по индексу.
         return elements[index];
     }
