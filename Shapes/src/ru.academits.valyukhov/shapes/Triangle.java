@@ -80,8 +80,8 @@ public class Triangle implements Shape {
         return Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
     }
 
-    public double getSideLength(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     @Override
@@ -93,8 +93,8 @@ public class Triangle implements Shape {
 
     @Override
     public String toString() {
-        return String.format("%-14s: (%.2f; %.2f), (%.2f; %.2f), (%.2f; %.2f) %-23s, площадь - %7.2f, "
-                + "периметр - %7.2f;", "Треугольник", x1, y1, x2, y2, x3, y3, "", getArea(), getPerimeter());
+        return String.format("%-14s: (%.2f; %.2f), (%.2f; %.2f), (%.2f; %.2f) %-23s, площадь - %7.2f, периметр - %7.2f;",
+                "Треугольник", x1, y1, x2, y2, x3, y3, "", getArea(), getPerimeter());
     }
 
     @Override

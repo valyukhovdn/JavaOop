@@ -1,47 +1,38 @@
 package ru.academits.valyukhov.shapes_main;
 
 import ru.academits.valyukhov.shapes.*;
+import ru.academits.valyukhov.shapes_comparators.ShapesAreaComparator;
+import ru.academits.valyukhov.shapes_comparators.ShapesPerimeterComparator;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class ShapesMain {
     private static Shape getMaxAreaShape(Shape[] shapes) {
         if (shapes.length == 0) {
-            throw new NullPointerException("ОШИБКА: Вычислить фигуру с наибольшей площадью невозможно, "
-                    + "т.к.переданный массив фигур пуст!");
+            throw new NullPointerException("Переданный массив фигур пуст!");
         }
 
+        //  Создаём экземпляр компаратора площадей фигур.
+        ShapesAreaComparator shapesAreaComparator = new ShapesAreaComparator();
         //  Сортируем массив фигур по возрастанию ПЛОЩАДЕЙ.
-        Arrays.sort(shapes, new Comparator<Shape>() {
-            @Override
-            public int compare(Shape shape1, Shape shape2) {
-                return Double.compare(shape1.getArea(), shape2.getArea());
-            }
-        });
+        Arrays.sort(shapes, shapesAreaComparator);
 
-        // Возвращаем фигуру с самой большой ПЛОЩАДЬЮ (последняя в массиве).
         return shapes[shapes.length - 1];
     }
 
     private static Shape getSecondPerimeterShape(Shape[] shapes) {
         if (shapes.length == 0) {
-            throw new NullPointerException("ОШИБКА: Вычислить фигуру со вторым по величине периметром невозможно, "
-                    + "т.к.переданный массив фигур пуст!");
+            throw new IllegalArgumentException("Переданный массив фигур пуст!");
         }
 
         if (shapes.length == 1) {
-            throw new NullPointerException("ОШИБКА: Вычислить фигуру со вторым по величине периметром невозможно, "
-                    + "т.к.переданный массив фигур содержит только один объект!");
+            throw new NullPointerException("Переданный массив фигур содержит только один объект!");
         }
 
+        //  Создаём экземпляр компаратора периметров фигур.
+        ShapesPerimeterComparator shapesPerimeterComparator = new ShapesPerimeterComparator();
         //  Сортируем массив фигур по возрастанию ПЕРИМЕТРОВ.
-        Arrays.sort(shapes, new Comparator<Shape>() {
-            @Override
-            public int compare(Shape shape1, Shape shape2) {
-                return Double.compare(shape1.getPerimeter(), shape2.getPerimeter());
-            }
-        });
+        Arrays.sort(shapes, shapesPerimeterComparator);
 
         // Возвращаем фигуру со вторым по величине ПЕРИМЕТРОМ (предпоследняя в массиве).
         return shapes[shapes.length - 2];
