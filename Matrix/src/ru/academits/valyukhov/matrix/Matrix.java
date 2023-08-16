@@ -105,7 +105,7 @@ public class Matrix {
 
     public Vector getRowByIndex(int rowIndex) {     //  Получение вектора-строки по индексу.
         if (rowIndex < 0 || rowIndex >= rows.length) {
-            throw new IndexOutOfBoundsException("ОШИБКА: Задан не существующий номер строки для получения вектора-строки по индексу.");
+            throw new IndexOutOfBoundsException("Задан не существующий номер строки для получения вектора-строки по индексу.");
         }
 
         return rows[rowIndex];
@@ -113,7 +113,7 @@ public class Matrix {
 
     public void setRow(int rowIndex, Vector row) {    // Задание вектора-строки по индексу.
         if (rowIndex < 0 || rowIndex >= rows.length) {
-            throw new IndexOutOfBoundsException("ОШИБКА: Задан не существующий номер строки для задания вектора-строки по индексу.");
+            throw new IndexOutOfBoundsException("Задан не существующий номер строки для задания вектора-строки по индексу.");
         }
 
         if (row.getSize() != rows[rowIndex].getSize()) {
@@ -121,12 +121,14 @@ public class Matrix {
                     row.getSize(), rows[rowIndex].getSize()));
         }
 
-        rows[rowIndex].setElements(row.getElements());
+        for (int i = 0; i < row.getSize(); ++i) {
+            rows[rowIndex].setComponent(i, row.getComponent(i));
+        }
     }
 
     public Vector getColumnByIndex(int columnIndex) {   //  Получение вектора-столбца по индексу.
         if (columnIndex < 0 || columnIndex >= rows[0].getSize()) {
-            throw new IndexOutOfBoundsException("ОШИБКА: Задан не существующий номер столбца для получения вектора-столбца по индексу.");
+            throw new IndexOutOfBoundsException("Задан не существующий номер столбца для получения вектора-столбца по индексу.");
         }
 
         Vector column = new Vector(rows.length);
@@ -139,8 +141,8 @@ public class Matrix {
     }
 
     public void printColumn(Vector column) {            //  Печать вектора в столбец (для печати вектора-столбца).
-        for (double element : column.getElements()) {
-            System.out.printf("%.2f%n", element);
+        for (int i = 0; i < column.getSize(); ++i) {
+            System.out.printf("%.2f%n", column.getComponent(i));
         }
 
         System.out.println();
@@ -207,15 +209,15 @@ public class Matrix {
 
     public Vector multiplyByVector(Vector columnVectorMultiplier) {
         if (rows.length == 0) {
-            throw new NullPointerException("ОШИБКА: Исходная матрица пуста!");
+            throw new NullPointerException("Исходная матрица пуста!");
         }
 
         if (columnVectorMultiplier.getSize() == 0) {
-            throw new NullPointerException("ОШИБКА: Переданный множитель (вектор-столбец) пуст!");
+            throw new NullPointerException("Переданный множитель (вектор-столбец) пуст!");
         }
 
         if (rows.length != columnVectorMultiplier.getSize()) {
-            throw new IllegalArgumentException("ОШИБКА: Число столбцов в матрице не совпадает с числом строк в векторе-столбце.");
+            throw new IllegalArgumentException("Число столбцов в матрице не совпадает с числом строк в векторе-столбце.");
         }
 
         double[] resultArray = new double[rows.length];
@@ -232,11 +234,11 @@ public class Matrix {
 
     public void addMatrix(Matrix matrix) {                 //  Сложение матриц (не static).
         if (rows.length == 0 || matrix.rows.length == 0) {
-            throw new NullPointerException("ОШИБКА: Одна или обе складываемые матрицы пустые!");
+            throw new NullPointerException("Одна или обе складываемые матрицы пустые!");
         }
 
         if (rows.length != matrix.rows.length || rows[0].getSize() != matrix.rows[0].getSize()) {
-            throw new IllegalArgumentException("ОШИБКА: Прибавить переданную матрицу нельзя, т.к. её "
+            throw new IllegalArgumentException("Прибавить переданную матрицу нельзя, т.к. её "
                     + "размерность отличается от размерности исходной матрицы!");
         }
 
@@ -249,11 +251,11 @@ public class Matrix {
 
     public void subtractMatrix(Matrix matrix) {                 //  Вычитание матриц (не static).
         if (rows.length == 0 || matrix.rows.length == 0) {
-            throw new NullPointerException("ОШИБКА: Исходная и/или вычитаемая матрицы пустые!");
+            throw new NullPointerException("Исходная и/или вычитаемая матрицы пустые!");
         }
 
         if (rows.length != matrix.rows.length || rows[0].getSize() != matrix.rows[0].getSize()) {
-            throw new IllegalArgumentException("ОШИБКА: Вычесть переданную матрицу нельзя, т.к. её "
+            throw new IllegalArgumentException("Вычесть переданную матрицу нельзя, т.к. её "
                     + "размерность отличается от размерности исходной матрицы!");
         }
 
@@ -266,11 +268,11 @@ public class Matrix {
 
     public static Matrix getMatricesSum(Matrix matrix1, Matrix matrix2) {    //  Сложение двух матриц (static).
         if (matrix1.rows.length == 0 || matrix2.rows.length == 0) {
-            throw new NullPointerException("ОШИБКА: Одна или обе суммируемые (static) матрицы пустые!");
+            throw new NullPointerException("Одна или обе суммируемые (static) матрицы пустые!");
         }
 
         if (matrix1.rows.length != matrix2.rows.length || matrix1.rows[0].getSize() != matrix2.rows[0].getSize()) {
-            throw new IllegalArgumentException("ОШИБКА: Сложить 2 переданные матрицы нельзя, т.к. они имеют разную размерность!");
+            throw new IllegalArgumentException("Сложить 2 переданные матрицы нельзя, т.к. они имеют разную размерность!");
         }
 
         Matrix resultSumMatrix = new Matrix(matrix1);
@@ -287,11 +289,11 @@ public class Matrix {
 
     public static Matrix getMatricesSubtraction(Matrix matrix1, Matrix matrix2) {    //  Вычитание двух матриц (static).
         if (matrix1.rows.length == 0 || matrix2.rows.length == 0) {
-            throw new NullPointerException("ОШИБКА: Одна или обе, переданные в метод вычитания (static), матрицы пустые!");
+            throw new NullPointerException("Одна или обе, переданные в метод вычитания (static), матрицы пустые!");
         }
 
         if (matrix1.rows.length != matrix2.rows.length || matrix1.rows[0].getSize() != matrix2.rows[0].getSize()) {
-            throw new IllegalArgumentException("ОШИБКА: Произвести операцию вычитания (static) с 2 переданными"
+            throw new IllegalArgumentException("Произвести операцию вычитания (static) с 2 переданными"
                     + " матрицами нельзя, т.к. они имеют разную размерность!");
         }
 
@@ -309,7 +311,7 @@ public class Matrix {
 
     public static Matrix getMatricesProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1.rows[0].getSize() != matrix2.rows.length) {
-            throw new IllegalArgumentException("ОШИБКА: Произвести умножение (static) первой матрицы на вторую нельзя "
+            throw new IllegalArgumentException("Произвести умножение (static) первой матрицы на вторую нельзя "
                     + "т.к. они не согласованы, т.е. число столбцов в первой матрице не равно числу строк во второй!");
         }
 

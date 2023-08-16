@@ -4,17 +4,15 @@ import java.util.Arrays;
 import java.util.Formatter;
 
 public class Vector {
-
     private double[] elements;
 
-    public Vector(int vectorArrayDimension) {
-        if (vectorArrayDimension <= 0) {
-            throw new IllegalArgumentException(String.format
-                    ("Размерность массива вектора (vectorArrayDimension) должна быть > 0. "
-                            + "Сейчас arrayDimension = %d ", vectorArrayDimension));
+    public Vector(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException(String.format("Размерность массива вектора (vectorArrayDimension) "
+                    + "должна быть > 0. Сейчас dimension = %d ", size));
         }
 
-        elements = new double[vectorArrayDimension];
+        elements = new double[size];
     }
 
     public Vector(Vector vector) {
@@ -23,37 +21,27 @@ public class Vector {
 
     public Vector(double[] elements) {
         if (elements.length == 0) {
-            throw new NullPointerException("ОШИБКА: Передаваемый в качестве аргумента массив пуст!");
+            throw new IllegalArgumentException("Передаваемый в качестве аргумента массив пуст!");
         }
 
         this.elements = Arrays.copyOf(elements, elements.length);
     }
 
-    public Vector(int vectorArrayDimension, double[] elements) {
-        if (vectorArrayDimension <= 0) {
-            throw new IllegalArgumentException(String.format("Размерность массива нового вектора (vectorArrayDimension) "
-                    + "должна быть > 0. Сейчас vectorArrayDimension = %d ", vectorArrayDimension));
+    public Vector(int size, double[] elements) {
+        if (size <= 0) {
+            throw new IllegalArgumentException(String.format("Размерность массива нового вектора (dimension) "
+                    + "должна быть > 0. Сейчас dimension = %d ", size));
         }
 
-        this.elements = new double[vectorArrayDimension];
-
-        System.arraycopy(elements, 0, this.elements, 0, Math.min(this.elements.length, elements.length));
-    }
-
-    public double[] getElements() {
-        return elements;
-    }
-
-    public void setElements(double[] elements) {
-        this.elements = elements;
+        this.elements = Arrays.copyOf(elements, size);
     }
 
     public double getComponent(int index) {    //  Получение одной компоненты вектора по индексу.
         return elements[index];
     }
 
-    public void setComponent(int index, double volume) {    //  Установка компоненты вектора по индексу.
-        this.elements[index] = volume;
+    public void setComponent(int index, double component) {    //  Установка компоненты вектора по индексу.
+        this.elements[index] = component;
     }
 
     public int getSize() {                     //  Получение размера массива компонент данного вектора.
@@ -64,14 +52,14 @@ public class Vector {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb);
-        sb.append("{");
+        sb.append('{');
 
         for (double e : elements) {
             formatter.format("%.2f; ", e);
         }
 
         sb.delete(sb.length() - 2, sb.length());
-        sb.append("}");
+        sb.append('}');
 
         return sb.toString();
     }
@@ -124,50 +112,32 @@ public class Vector {
         }
     }
 
-    public void revers() {    //  Разворот вектора (умножение всех компонент на -1).
-        for (int i = 0; i < elements.length; ++i) {
-            elements[i] *= -1;
-        }
+    public void reversal() {    //  Разворот вектора (умножение всех компонент на -1).
+        multiplyByScalar(-1);
     }
 
     public double getLength() {    //  Получение длины вектора.
-        double temporaryVariable = 0;
+        double squaredVectorCoordinatesSum = 0;
 
         for (double e : elements) {
-            temporaryVariable += e * e;
+            squaredVectorCoordinatesSum += e * e;
         }
 
-        return Math.sqrt(temporaryVariable);
+        return Math.sqrt(squaredVectorCoordinatesSum);
     }
 
-    public static Vector getVectorsSum(Vector vector1, Vector vector2) {    //  Сложение двух векторов (static).
-        Vector resultingVector;
+    public static Vector getSum(Vector vector1, Vector vector2) {    //  Сложение двух векторов (static).
+        Vector resultingVector = new Vector(Math.max(vector1.getSize(), vector2.getSize()));
 
-        if (vector1.getSize() >= vector2.getSize()) {
-            resultingVector = new Vector(Arrays.copyOf(vector1.elements, vector1.elements.length));
-
-            resultingVector.add(vector2);
-        } else {
-            resultingVector = new Vector(Arrays.copyOf(vector2.elements, vector2.elements.length));
-
-            resultingVector.add(vector1);
-        }
+        resultingVector.add(vector1);
+        resultingVector.add(vector2);
 
         return resultingVector;
     }
 
-    public static Vector getVectorDifference(Vector vector1, Vector vector2) {    //  Вычитание вектора (static).
-        Vector resultingVector;
-
-        if (vector1.getSize() >= vector2.getSize()) {
-            resultingVector = new Vector(Arrays.copyOf(vector1.elements, vector1.elements.length));
-
-            resultingVector.subtract(vector2);
-        } else {
-            resultingVector = new Vector(Arrays.copyOf(vector1.elements, vector2.elements.length));
-
-            resultingVector.subtract(vector2);
-        }
+    public static Vector getDifference(Vector vector1, Vector vector2) {    //  Вычитание вектора (static).
+        Vector resultingVector = new Vector(Math.max(vector1.getSize(), vector2.getSize()), vector1.elements);
+        resultingVector.subtract(vector2);
 
         return resultingVector;
     }

@@ -4,11 +4,11 @@ import ru.academits.valyukhov.vector.Vector;
 
 public class VectorMain {
     public static void main(String[] args) {
-        Vector vector1 = new Vector(new double[]{1.2, 3.7, 5.8, 0.64});
+        Vector vector1 = new Vector(new double[]{1.2, 3.7, 5.8});
 
         System.out.println("\"vector1\": " + vector1);
 
-        Vector vector2 = new Vector(new double[]{0.8, 0.3, 0.2});
+        Vector vector2 = new Vector(new double[]{0.8, 0.3, 0.2, 0.64});
 
         System.out.println("\"vector2\": " + vector2);
         System.out.println();
@@ -24,11 +24,11 @@ public class VectorMain {
         System.out.println();
 
         System.out.println("В результате сложения двух векторов (static) получаем новый вектор:");
-        System.out.println(Vector.getVectorsSum(vector1, vector2));
+        System.out.println(Vector.getSum(vector1, vector2));
         System.out.println();
 
         System.out.println("В результате вычитания двух векторов (static) получаем новый вектор:");
-        System.out.println(Vector.getVectorDifference(vector1, vector2));
+        System.out.println(Vector.getDifference(vector1, vector2));
         System.out.println();
 
         System.out.print("Скалярное произведение (static) векторов \"vector1\" и \"vector2\" равно:");
@@ -42,7 +42,7 @@ public class VectorMain {
         System.out.println();
 
         System.out.println("Результат разворота (умножения всех компонент на -1) вектора \"vector1\":");
-        vector1.revers();
+        vector1.reversal();
         System.out.println("\"vector1\" стал: " + vector1);
         System.out.println();
 
