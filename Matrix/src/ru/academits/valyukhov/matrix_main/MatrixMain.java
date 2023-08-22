@@ -6,16 +6,19 @@ import ru.academits.valyukhov.vector.Vector;
 
 public class MatrixMain {
     public static void main(String[] args) {
-        Matrix matrix = new Matrix(2, 3);  //  Используем конструктор Matrix(n, m) – матрица нулей размера nxm
+        //  Используем конструктор Matrix(n, m) – матрица нулей размера nxm.
+        Matrix matrix = new Matrix(2, 3);
 
-        System.out.println(matrix);              //  Используем переопределённый метод toString.
+        //  Используем переопределённый метод toString.
+        System.out.println(matrix);
         System.out.printf("У этой матрицы количество строк - %d, количество столбцов - %d.%n",
                 matrix.getRowsQuantity(), matrix.getColumnsQuantity());
         System.out.println();
 
         System.out.println("Создадим новую матрицу №1:");
 
-        Matrix matrix1 = new Matrix(new Vector[]{  //  Используем конструктор Matrix(Vector[]) – из массива векторов-строк.
+        //  Используем конструктор Matrix(Vector[]) – из массива векторов-строк.
+        Matrix matrix1 = new Matrix(new Vector[]{
                 new Vector(new double[]{1}),
                 new Vector(new double[]{2, 2}),
                 new Vector(new double[]{3, 3, 3}),
@@ -54,6 +57,7 @@ public class MatrixMain {
         Print.printColumn(matrix1.multiplyByVector(columnVectorMultiplier));
 
         System.out.println("Создадим матрицу №2:");
+        //  Используем конструктор Matrix(double[][]).
         Matrix matrix2 = new Matrix(new double[][]{{4, 4, 4, 4}, {3, 3, 3}, {2, 2}, {1}});
         Print.print(matrix2);
 

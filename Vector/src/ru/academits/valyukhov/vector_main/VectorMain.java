@@ -31,7 +31,7 @@ public class VectorMain {
         System.out.println(Vector.getDifference(vector1, vector2));
         System.out.println();
 
-        System.out.print("Скалярное произведение (static) векторов \"vector1\" и \"vector2\" равно:");
+        System.out.print("Скалярное произведение (static) векторов \"vector1\" и \"vector2\" равно: ");
         System.out.printf("%10.2f%n", Vector.getScalarProduct(vector1, vector2));
         System.out.println();
 
@@ -41,19 +41,19 @@ public class VectorMain {
         System.out.println("\"vector1\": " + vector1);
         System.out.println();
 
-        System.out.println("Результат разворота (умножения всех компонент на -1) вектора \"vector1\":");
-        vector1.reversal();
+        System.out.println("Результат разворота (умножения всех элементов на -1) вектора \"vector1\":");
+        vector1.reverse();
         System.out.println("\"vector1\" стал: " + vector1);
         System.out.println();
 
         System.out.printf("Длина вектора \"vector1\" равна: %10.2f%n", vector1.getLength());
         System.out.println();
 
-        System.out.printf("Компонента с индексом \"1\" вектора \"vector2\" равна: %10.2f%n", vector2.getComponent(1));
+        System.out.printf("Элемент с индексом \"1\" вектора \"vector2\" равен: %10.2f%n", vector2.getElement(1));
         System.out.println();
 
-        System.out.println("Теперь заменяем значение компоненты с индексом \"1\" вектора \"vector2\" на 12,34.");
-        vector2.setComponent(1, 12.34);
+        System.out.println("Теперь заменяем значение элемента с индексом \"1\" вектора \"vector2\" на 12,34.");
+        vector2.setElement(1, 12.34);
         System.out.println("Вектор \"vector2\" имеет значения: " + vector2);
         System.out.println();
 

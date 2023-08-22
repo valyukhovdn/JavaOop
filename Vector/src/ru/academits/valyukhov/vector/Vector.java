@@ -8,8 +8,8 @@ public class Vector {
 
     public Vector(int size) {
         if (size <= 0) {
-            throw new IllegalArgumentException(String.format("Размерность массива вектора (vectorArrayDimension) "
-                    + "должна быть > 0. Сейчас dimension = %d ", size));
+            throw new IllegalArgumentException(String.format("Размерность массива вектора должна быть > 0. "
+                    + "Сейчас size = %d ", size));
         }
 
         elements = new double[size];
@@ -29,22 +29,25 @@ public class Vector {
 
     public Vector(int size, double[] elements) {
         if (size <= 0) {
-            throw new IllegalArgumentException(String.format("Размерность массива нового вектора (dimension) "
-                    + "должна быть > 0. Сейчас dimension = %d ", size));
+            throw new IllegalArgumentException(String.format("Размерность массива создаваемого вектора (size) "
+                    + "должна быть > 0. Сейчас size = %d ", size));
         }
 
         this.elements = Arrays.copyOf(elements, size);
     }
 
-    public double getComponent(int index) {    //  Получение одной компоненты вектора по индексу.
+    //  Получение одного элемента вектора по индексу.
+    public double getElement(int index) {
         return elements[index];
     }
 
-    public void setComponent(int index, double component) {    //  Установка компоненты вектора по индексу.
-        this.elements[index] = component;
+    //  Установка элемента вектора по индексу.
+    public void setElement(int index, double element) {
+        elements[index] = element;
     }
 
-    public int getSize() {                     //  Получение размера массива компонент данного вектора.
+    //  Получение размера массива элементов данного вектора.
+    public int getSize() {
         return elements.length;
     }
 
@@ -86,9 +89,10 @@ public class Vector {
         return Arrays.equals(elements, vector.elements);
     }
 
-    public void add(Vector vector) {    //  Прибавление к вектору другого вектора.
-        if (getSize() < vector.getSize()) {
-            elements = Arrays.copyOf(elements, vector.getSize());
+    //  Прибавление к вектору другого вектора.
+    public void add(Vector vector) {
+        if (elements.length < vector.elements.length) {
+            elements = Arrays.copyOf(elements, vector.elements.length);
         }
 
         for (int i = 0; i < vector.elements.length; ++i) {
@@ -96,9 +100,10 @@ public class Vector {
         }
     }
 
-    public void subtract(Vector vector) {    //  Вычитание из вектора другого вектора.
-        if (getSize() < vector.getSize()) {
-            elements = Arrays.copyOf(elements, vector.getSize());
+    //  Вычитание из вектора другого вектора.
+    public void subtract(Vector vector) {
+        if (elements.length < vector.elements.length) {
+            elements = Arrays.copyOf(elements, vector.elements.length);
         }
 
         for (int i = 0; i < vector.elements.length; ++i) {
@@ -106,42 +111,48 @@ public class Vector {
         }
     }
 
-    public void multiplyByScalar(double scalar) {    //  Умножение вектора на скаляр.
+    //  Умножение вектора на скаляр.
+    public void multiplyByScalar(double scalar) {
         for (int i = 0; i < elements.length; ++i) {
             elements[i] *= scalar;
         }
     }
 
-    public void reversal() {    //  Разворот вектора (умножение всех компонент на -1).
+    //  Разворот вектора (умножение всех элементов на -1).
+    public void reverse() {
         multiplyByScalar(-1);
     }
 
-    public double getLength() {    //  Получение длины вектора.
-        double squaredVectorCoordinatesSum = 0;
+    //  Получение длины вектора.
+    public double getLength() {
+        double Sum = 0;
 
         for (double e : elements) {
-            squaredVectorCoordinatesSum += e * e;
+            Sum += e * e;
         }
 
-        return Math.sqrt(squaredVectorCoordinatesSum);
+        return Math.sqrt(Sum);
     }
 
-    public static Vector getSum(Vector vector1, Vector vector2) {    //  Сложение двух векторов (static).
-        Vector resultingVector = new Vector(Math.max(vector1.getSize(), vector2.getSize()));
+    //  Сложение двух векторов (static).
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        Vector resultVector = new Vector(Math.max(vector1.elements.length, vector2.elements.length), vector1.elements);
 
-        resultingVector.add(vector1);
-        resultingVector.add(vector2);
+        resultVector.add(vector2);
 
-        return resultingVector;
+        return resultVector;
     }
 
-    public static Vector getDifference(Vector vector1, Vector vector2) {    //  Вычитание вектора (static).
-        Vector resultingVector = new Vector(Math.max(vector1.getSize(), vector2.getSize()), vector1.elements);
-        resultingVector.subtract(vector2);
+    //  Вычитание вектора (static).
+    public static Vector getDifference(Vector vector1, Vector vector2) {
+        Vector resultVector = new Vector(Math.max(vector1.elements.length, vector2.elements.length), vector1.elements);
 
-        return resultingVector;
+        resultVector.subtract(vector2);
+
+        return resultVector;
     }
 
+    //  Скалярное произведение векторов.
     public static double getScalarProduct(Vector vector1, Vector vector2) {
         double result = 0;
         int minVectorSize = Math.min(vector1.elements.length, vector2.elements.length);

@@ -14,7 +14,7 @@ public class Print {
 
     public static void printColumn(Vector column) {            //  Печать вектора в столбец (для печати вектора-столбца).
         for (int i = 0; i < column.getSize(); ++i) {
-            System.out.printf("%.2f%n", column.getComponent(i));
+            System.out.printf("%.2f%n", column.getElement(i));
         }
 
         System.out.println();
