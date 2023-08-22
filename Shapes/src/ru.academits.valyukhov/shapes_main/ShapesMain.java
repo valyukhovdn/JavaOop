@@ -9,13 +9,11 @@ import java.util.Arrays;
 public class ShapesMain {
     private static Shape getMaxAreaShape(Shape[] shapes) {
         if (shapes.length == 0) {
-            throw new NullPointerException("Переданный массив фигур пуст!");
+            throw new IllegalArgumentException("Переданный массив фигур пуст!");
         }
 
-        //  Создаём экземпляр компаратора площадей фигур.
-        ShapesAreaComparator shapesAreaComparator = new ShapesAreaComparator();
         //  Сортируем массив фигур по возрастанию ПЛОЩАДЕЙ.
-        Arrays.sort(shapes, shapesAreaComparator);
+        Arrays.sort(shapes, new ShapesAreaComparator());
 
         return shapes[shapes.length - 1];
     }
@@ -26,13 +24,11 @@ public class ShapesMain {
         }
 
         if (shapes.length == 1) {
-            throw new NullPointerException("Переданный массив фигур содержит только один объект!");
+            throw new IllegalArgumentException("Переданный массив фигур содержит только один объект!");
         }
 
-        //  Создаём экземпляр компаратора периметров фигур.
-        ShapesPerimeterComparator shapesPerimeterComparator = new ShapesPerimeterComparator();
         //  Сортируем массив фигур по возрастанию ПЕРИМЕТРОВ.
-        Arrays.sort(shapes, shapesPerimeterComparator);
+        Arrays.sort(shapes, new ShapesPerimeterComparator());
 
         // Возвращаем фигуру со вторым по величине ПЕРИМЕТРОМ (предпоследняя в массиве).
         return shapes[shapes.length - 2];
