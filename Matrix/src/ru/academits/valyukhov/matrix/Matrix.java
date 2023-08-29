@@ -5,16 +5,16 @@ import ru.academits.valyukhov.vector.Vector;
 public class Matrix {
     private Vector[] rows;
 
-    //  РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Matrix(n, m) вЂ“ РјР°С‚СЂРёС†Р° РЅСѓР»РµР№ СЂР°Р·РјРµСЂР° n x m.
+    //  Конструктор Matrix(n, m) – матрица нулей размера n x m.
     public Matrix(int rowsQuantity, int columnsQuantity) {
         if (rowsQuantity < 1) {
-            throw new IllegalArgumentException(String.format("РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ РјР°С‚СЂРёС†Рµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РјРµРЅРµРµ 1. "
-                    + "РџРµСЂРµРґР°РЅРѕ Р·РЅР°С‡РµРЅРёРµ: %d", rowsQuantity));
+            throw new IllegalArgumentException(String.format("Количество строк в матрице должно быть не менее 1. "
+                    + "Передано значение: %d", rowsQuantity));
         }
 
         if (columnsQuantity < 1) {
-            throw new IllegalArgumentException(String.format("РљРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚РѕР»Р±С†РѕРІ РІ РјР°С‚СЂРёС†Рµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РјРµРЅРµРµ 1. "
-                    + "РџРµСЂРµРґР°РЅРѕ Р·РЅР°С‡РµРЅРёРµ: %d", columnsQuantity));
+            throw new IllegalArgumentException(String.format("Количество столбцов в матрице должно быть не менее 1. "
+                    + "Передано значение: %d", columnsQuantity));
         }
 
         rows = new Vector[rowsQuantity];
@@ -24,19 +24,19 @@ public class Matrix {
         }
     }
 
-    //  РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Matrix(Matrix) вЂ“ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ.
+    //  Конструктор Matrix(Matrix) – конструктор копирования.
     public Matrix(Matrix matrix) {
-        rows = new Vector[matrix.rows.length];     //  РЎРѕР·РґР°С‘Рј РјР°СЃСЃРёРІ РїСѓСЃС‚С‹С… РІРµРєС‚РѕСЂРѕРІ-СЃС‚СЂРѕРє.
+        rows = new Vector[matrix.rows.length];     //  Создаём массив пустых векторов-строк.
 
-        for (int i = 0; i < rows.length; ++i) {    //  РљРѕРїРёСЂСѓРµРј СЃС‚СЂРѕРєРё РїРµСЂРµРґР°РЅРЅРѕР№ РјР°С‚СЂРёС†С‹ РІ РІРµРєС‚РѕСЂ СЃС‚СЂРѕРє СЃРѕР·РґР°РІР°РµРјРѕР№ РјР°С‚СЂРёС†С‹.
-            rows[i] = new Vector(matrix.rows[1]);
+        for (int i = 0; i < rows.length; ++i) {    //  Копируем строки переданной матрицы в вектор строк создаваемой матрицы.
+            rows[i] = new Vector(matrix.rows[i]);
         }
     }
 
-    //  РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Matrix(double[][]) вЂ“ РёР· РґРІСѓРјРµСЂРЅРѕРіРѕ РјР°СЃСЃРёРІР°.
+    //  Конструктор Matrix(double[][]) – из двумерного массива.
     public Matrix(double[][] array) {
         if (array.length == 0) {
-            throw new IllegalArgumentException("РњР°СЃСЃРёРІ, РїРµСЂРµРґР°РЅРЅС‹Р№ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ, РїСѓСЃС‚!");
+            throw new IllegalArgumentException("Массив, переданный в конструктор, пуст!");
         }
 
         rows = new Vector[array.length];
@@ -44,13 +44,13 @@ public class Matrix {
         int maxRowSize = 0;
 
         for (double[] row : array) {
-            if (row.length == 0) {
-                throw new IllegalArgumentException("РџРµСЂРµРґР°РЅРЅС‹Р№ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РјР°СЃСЃРёРІ РёРјРµРµС‚ РїСѓСЃС‚СѓСЋ СЃС‚СЂРѕРєСѓ!");
-            }
-
             if (maxRowSize < row.length) {
                 maxRowSize = row.length;
             }
+        }
+
+        if (maxRowSize == 0) {
+            throw new IllegalArgumentException("Переданный в конструктор двумерный массив состоит из пустых строк.");
         }
 
         for (int i = 0; i < rows.length; ++i) {
@@ -58,28 +58,24 @@ public class Matrix {
         }
     }
 
-    //  РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ Matrix(Vector[]) вЂ“ РёР· РјР°СЃСЃРёРІР° РІРµРєС‚РѕСЂРѕРІ-СЃС‚СЂРѕРє.
+    //  Конструктор Matrix(Vector[]) – из массива векторов-строк.
     public Matrix(Vector[] rowsArray) {
         if (rowsArray.length == 0) {
-            throw new IllegalArgumentException("РњР°СЃСЃРёРІ РІРµРєС‚РѕСЂРѕРІ, РїРµСЂРµРґР°РЅРЅС‹Р№ РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ, РїСѓСЃС‚!");
+            throw new IllegalArgumentException("Массив векторов, переданный в конструктор, пуст!");
         }
 
-        int maxRowSize = 0;                //  РћРїСЂРµРґРµР»СЏРµРј РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ СЃС‚СЂРѕРєРё РїРµСЂРµРґР°РІР°РµРјРѕР№ РјР°С‚СЂРёС†С‹.
+        int maxRowSize = 0;                //  Определяем максимальную длину строки передаваемой матрицы.
 
         for (Vector row : rowsArray) {
-            if (row.getSize() == 0) {
-                throw new IllegalArgumentException("Р’ РјР°СЃСЃРёРІРµ РІРµРєС‚РѕСЂРѕРІ, РїРµСЂРµРґР°РЅРЅРѕРј РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ, РµСЃС‚СЊ РїСѓСЃС‚РѕР№ РІРµРєС‚РѕСЂ-СЃС‚СЂРѕРєР°!");
-            }
-
             if (maxRowSize < row.getSize()) {
                 maxRowSize = row.getSize();
             }
         }
 
-        rows = new Vector[rowsArray.length];      //  РЎРѕР·РґР°С‘Рј РјР°СЃСЃРёРІ РїСѓСЃС‚С‹С… РІРµРєС‚РѕСЂРѕРІ-СЃС‚СЂРѕРє.
+        rows = new Vector[rowsArray.length];      //  Создаём массив пустых векторов-строк.
 
         for (int i = 0; i < rows.length; ++i) {
-            rows[i] = new Vector(maxRowSize);    //  Р—Р°РґР°С‘Рј РєР°Р¶РґРѕРјСѓ РІРµРєС‚РѕСЂСѓ-СЃС‚СЂРѕРєРµ РґР»РёРЅСѓ (Р°РІС‚РѕРјР°С‚РѕРј Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ РЅСѓР»СЏРјРё).
+            rows[i] = new Vector(maxRowSize);    //  Задаём каждому вектору-строке длину (автоматом заполняется нулями).
             rows[i].add(rowsArray[i]);
         }
     }
@@ -90,45 +86,44 @@ public class Matrix {
         sb.append('{');
 
         for (Vector vector : rows) {
-            sb.append(vector);
-            sb.append(' ');
+            sb.append(vector).append(' ');
         }
 
-        sb.append('\b');
+        sb.deleteCharAt(sb.length() - 1);
         sb.append('}');
 
         return sb.toString();
     }
 
-    //  РџРѕР»СѓС‡РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚СЂРѕРє РјР°С‚СЂРёС†С‹.
+    //  Получение количества строк матрицы.
     public int getRowsQuantity() {
         return rows.length;
     }
 
-    //  РџРѕР»СѓС‡РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° СЃС‚РѕР»Р±С†РѕРІ РјР°С‚СЂРёС†С‹.
+    //  Получение количества столбцов матрицы.
     public int getColumnsQuantity() {
         return rows[0].getSize();
     }
 
-    //  РџРѕР»СѓС‡РµРЅРёРµ Рё Р·Р°РґР°РЅРёРµ РІРµРєС‚РѕСЂР°-СЃС‚СЂРѕРєРё РїРѕ РёРЅРґРµРєСЃСѓ.
+    //  Получение и задание вектора-строки по индексу.
     public Vector getRowByIndex(int rowIndex) {
         if (rowIndex < 0 || rowIndex >= rows.length) {
-            throw new IndexOutOfBoundsException(String.format("Р—Р°РґР°РЅ РёРЅРґРµРєСЃ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ РЅРѕРјРµСЂР° СЃС‚СЂРѕРєРё (%d) РґР»СЏ "
-                    + "РїРѕР»СѓС‡РµРЅРёСЏ РІРµРєС‚РѕСЂР°-СЃС‚СЂРѕРєРё. РРЅРґРµРєСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ %d.", rowIndex, rows.length - 1));
+            throw new IndexOutOfBoundsException(String.format("В метод получения вектора-строки передан индекс "
+                    + "несуществующей строки (%d). Индекс должен быть в диапазоне от 0 до %d.", rowIndex, rows.length - 1));
         }
 
         return new Vector(rows[rowIndex]);
     }
 
-    // Р—Р°РґР°РЅРёРµ РІРµРєС‚РѕСЂР°-СЃС‚СЂРѕРєРё РїРѕ РёРЅРґРµРєСЃСѓ.
+    // Задание вектора-строки по индексу.
     public void setRowByIndex(int rowIndex, Vector row) {
         if (rowIndex < 0 || rowIndex >= rows.length) {
-            throw new IndexOutOfBoundsException(String.format("Р—Р°РґР°РЅ РёРЅРґРµРєСЃ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ РЅРѕРјРµСЂР° СЃС‚СЂРѕРєРё (%d) РґР»СЏ "
-                    + "Р·Р°РґР°РЅРёСЏ РІРµРєС‚РѕСЂР°-СЃС‚СЂРѕРєРё. РРЅРґРµРєСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ %d.", rowIndex, rows.length - 1));
+            throw new IndexOutOfBoundsException(String.format("В метод задания вектора-строки по индексу передан индекс"
+                    + "несуществующей строки (%d). Индекс должен быть в диапазоне от 0 до %d.", rowIndex, rows.length - 1));
         }
 
         if (row.getSize() != getColumnsQuantity()) {
-            throw new IllegalArgumentException(String.format("РџРµСЂРµРґР°РЅРЅС‹Р№ РІРµРєС‚РѕСЂ-СЃС‚СЂРѕРєР° РёРјРµРµС‚ СЂР°Р·РјРµСЂ %d, Р° С‚СЂРµР±СѓРµС‚СЃСЏ %d!",
+            throw new IllegalArgumentException(String.format("Переданный вектор-строка имеет размер %d, а требуется %d!",
                     row.getSize(), getColumnsQuantity()));
         }
 
@@ -137,11 +132,11 @@ public class Matrix {
         }
     }
 
-    //  РџРѕР»СѓС‡РµРЅРёРµ РІРµРєС‚РѕСЂР°-СЃС‚РѕР»Р±С†Р° РїРѕ РёРЅРґРµРєСЃСѓ.
+    //  Получение вектора-столбца по индексу.
     public Vector getColumnByIndex(int columnIndex) {
         if (columnIndex < 0 || columnIndex >= getColumnsQuantity()) {
-            throw new IndexOutOfBoundsException(String.format("Р—Р°РґР°РЅ РЅРµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РёРЅРґРµРєСЃ СЃС‚РѕР»Р±С†Р° (%d) РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ "
-                    + "РІРµРєС‚РѕСЂР°-СЃС‚РѕР»Р±С†Р°. РРЅРґРµРєСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ РґРёР°РїР°Р·РѕРЅРµ РѕС‚ 0 РґРѕ %d.", columnIndex, getColumnsQuantity() - 1));
+            throw new IndexOutOfBoundsException(String.format("В метод получения вектора-столбца передан индекс "
+                    + "несуществующего столбца (%d). Индекс должен быть в диапазоне от 0 до %d.", columnIndex, getColumnsQuantity() - 1));
         }
 
         Vector column = new Vector(rows.length);
@@ -153,27 +148,25 @@ public class Matrix {
         return column;
     }
 
-    //  РўСЂР°РЅСЃРїРѕРЅРёСЂРѕРІР°РЅРёРµ РјР°С‚СЂРёС†С‹.
+    //  Транспонирование матрицы.
     public void transpose() {
-        double[][] transposedArray = new double[getColumnsQuantity()][rows.length];
+        Vector[] transposedRows = new Vector[getColumnsQuantity()];
 
-        for (int i = 0; i < getColumnsQuantity(); ++i) {
-            for (int j = 0; j < rows.length; ++j) {
-                transposedArray[i][j] = getColumnByIndex(i).getElement(j);
-            }
+        for (int i = 0; i < transposedRows.length; ++i) {
+            transposedRows[i] = getColumnByIndex(i);
         }
 
-        rows = (new Matrix(transposedArray)).rows;
+        rows = transposedRows;
     }
 
-    //  РЈРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†С‹ РЅР° СЃРєР°Р»СЏСЂ.
+    //  Умножение матрицы на скаляр.
     public void multiplyByScalar(double scalar) {
         for (Vector row : rows) {
             row.multiplyByScalar(scalar);
         }
     }
 
-    //  РџРѕР»СѓС‡РµРЅРёРµ СѓРјРµРЅСЊС€РµРЅРЅРѕР№ РјР°С‚СЂРёС†С‹ РґР»СЏ СЂР°СЃС‡С‘С‚Р° РѕРїСЂРµРґРµР»РёС‚РµР»СЏ РѕСЃРЅРѕРІРЅРѕР№ РјР°С‚СЂРёС†С‹.
+    //  Получение уменьшенной матрицы для расчёта определителя основной матрицы.
     public Matrix getReducedMatrix(int baseRowIndex, int baseColumnIndex) {
         Matrix reducedMatrix = new Matrix(rows.length - 1, getColumnsQuantity() - 1);
 
@@ -198,125 +191,107 @@ public class Matrix {
         return reducedMatrix;
     }
 
-    //  Р’С‹С‡РёСЃР»РµРЅРёРµ РѕРїСЂРµРґРµР»РёС‚РµР»СЏ РјР°С‚СЂРёС†С‹.
+    //  Вычисление определителя матрицы.
     public double getDeterminant() {
         if (rows.length != getColumnsQuantity()) {
-            throw new IllegalArgumentException(String.format("РћРїСЂРµРґРµР»РёС‚РµР»СЊ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІС‹С‡РёСЃР»РµРЅ, С‚.Рє. "
-                    + "РјР°С‚СЂРёС†Р° РЅРµ РєРІР°РґСЂР°С‚РЅР°СЏ, Р° РёРјРµРµС‚ СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ %d x %d.", rows.length, getColumnsQuantity()));
+            throw new UnsupportedOperationException(String.format("Определитель не может быть вычислен, т.к. "
+                    + "матрица не квадратная, а имеет размерность %d x %d.", rows.length, getColumnsQuantity()));
         }
 
-        int baseRowIndex = 0;                   //  Р’С‹Р±РёСЂР°РµРј СЃС‚СЂРѕРєСѓ "0" РІ РєР°С‡-РІРµ Р±Р°Р·РѕРІРѕР№ (СЌР»РµРјРµРЅС‚С‹ РєРѕС‚РѕСЂРѕР№ Р±СѓРґРµРј СѓРјРЅРѕР¶Р°С‚СЊ РѕРїСЂРµРґРµР»РёС‚РµР»Рё РјРёРЅРѕСЂРѕРІ).
-        int rowLength = getColumnsQuantity();   // РћРїСЂРµРґРµР»СЏРµРј РґР»РёРЅСѓ СЃС‚СЂРѕРє РјР°С‚СЂРёС†С‹.
+        int baseRowIndex = 0;                   //  Выбираем строку "0" в кач-ве базовой (элементы которой будем умножать определители миноров).
+        int rowLength = getColumnsQuantity();   // Определяем длину строк матрицы.
         double determinant = 0;
 
-        if (rows.length == 1) {                 //  Р•СЃР»Рё РјР°С‚СЂРёС†Р° 1С…1, С‚Рѕ РѕРїСЂРµРґРµР»РёС‚РµР»СЊ СЂР°РІРµРЅ СЌС‚РѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ.
+        if (rows.length == 1) {                 //  Если матрица 1х1, то определитель равен этому элементу.
             return rows[0].getElement(0);
         }
 
         for (int i = 0; i < rowLength; ++i) {
             determinant += ((i % 2 == 0) ? 1 : -1) * rows[baseRowIndex].getElement(i)
-                    * getReducedMatrix(baseRowIndex, i).getDeterminant();    //  Р РµРєСѓСЂСЃРёРІРЅС‹Р№ РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё РёР· СЃР°РјРѕР№ СЃРµР±СЏ.
+                    * getReducedMatrix(baseRowIndex, i).getDeterminant();    //  Рекурсивный вызов функции из самой себя.
         }
 
         return determinant;
     }
 
-    //  РЈРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†С‹ РЅР° РІРµРєС‚РѕСЂ.
+    //  Умножение матрицы на вектор.
     public Vector multiplyByVector(Vector columnVector) {
         if (getColumnsQuantity() != columnVector.getSize()) {
-            throw new IllegalArgumentException(String.format("Р§РёСЃР»Рѕ СЃС‚РѕР»Р±С†РѕРІ РІ РјР°С‚СЂРёС†Рµ (%d) РЅРµ СЃРѕРІРїР°РґР°РµС‚ "
-                    + "СЃ С‡РёСЃР»РѕРј СЌР»РµРјРµРЅС‚РѕРІ РІ РІРµРєС‚РѕСЂРµ-СЃС‚РѕР»Р±С†Рµ (%d).", getColumnsQuantity(), columnVector.getSize()));
+            throw new IllegalArgumentException(String.format("Число столбцов в матрице (%d) не совпадает "
+                    + "с числом элементов в векторе-столбце (%d).", getColumnsQuantity(), columnVector.getSize()));
         }
 
-        double[] resultArray = new double[rows.length];
+        Vector resultColumn = new Vector(rows.length);
 
         for (int i = 0; i < rows.length; ++i) {
-            for (int j = 0; j < getColumnsQuantity(); ++j) {
-                resultArray[i] += rows[i].getElement(j) * columnVector.getElement(j);
-            }
+            resultColumn.setElement(i, Vector.getScalarProduct(rows[i], columnVector));
         }
 
-        return new Vector(resultArray);
+        return resultColumn;
     }
 
-    //  РџСЂРѕРІРµСЂРєР° РјР°С‚СЂРёС† РЅР° РќР•СЂР°РІРµРЅСЃС‚РІРѕ.
-    public boolean hasNoSameDimension(Matrix matrix) {
-        return (rows.length != matrix.rows.length || getColumnsQuantity() != matrix.getColumnsQuantity());
-    }
-
-    //  РЎР»РѕР¶РµРЅРёРµ РјР°С‚СЂРёС† (РЅРµ static).
-    public void add(Matrix matrix) {
-        if (hasNoSameDimension(matrix)) {
-            throw new IllegalArgumentException(String.format("РџСЂРёР±Р°РІРёС‚СЊ РїРµСЂРµРґР°РЅРЅСѓСЋ РјР°С‚СЂРёС†Сѓ РЅРµР»СЊР·СЏ, С‚.Рє. РµС‘ "
-                            + "СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ (%d x %d) РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ СЂР°Р·РјРµСЂРЅРѕСЃС‚Рё РёСЃС…РѕРґРЅРѕР№ РјР°С‚СЂРёС†С‹ (%d x %d)!",
+    //  Проверка матриц на равенство размерностей.
+    public void hasSameDimension(Matrix matrix) {
+        if (rows.length != matrix.rows.length || getColumnsQuantity() != matrix.getColumnsQuantity()) {
+            throw new IllegalArgumentException(String.format("Матрицы имеют разные размерности: (%d x %d) и (%d x %d)."
+                            + "Поэтому операции сложения и вычитания между ними производить невозможно!",
                     matrix.rows.length, matrix.getColumnsQuantity(), rows.length, getColumnsQuantity()));
         }
+    }
+
+    //  Сложение матриц (не static).
+    public void add(Matrix matrix) {
+        hasSameDimension(matrix);
 
         for (int i = 0; i < rows.length; ++i) {
             rows[i].add(matrix.rows[i]);
         }
     }
 
-    //  Р’С‹С‡РёС‚Р°РЅРёРµ РјР°С‚СЂРёС† (РЅРµ static).
+    //  Вычитание матриц (не static).
     public void subtract(Matrix matrix) {
-        if (hasNoSameDimension(matrix)) {
-            throw new IllegalArgumentException(String.format("Р’С‹С‡РµСЃС‚СЊ РїРµСЂРµРґР°РЅРЅСѓСЋ РјР°С‚СЂРёС†Сѓ РЅРµР»СЊР·СЏ, С‚.Рє. РµС‘ "
-                            + "СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ (%d x %d) РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ СЂР°Р·РјРµСЂРЅРѕСЃС‚Рё РёСЃС…РѕРґРЅРѕР№ РјР°С‚СЂРёС†С‹ (%d x %d)!",
-                    matrix.rows.length, matrix.getColumnsQuantity(), rows.length, getColumnsQuantity()));
-        }
+        hasSameDimension(matrix);
 
         for (int i = 0; i < rows.length; ++i) {
             rows[i].subtract(matrix.rows[i]);
         }
     }
 
-    //  РЎР»РѕР¶РµРЅРёРµ РґРІСѓС… РјР°С‚СЂРёС† (static).
+    //  Сложение двух матриц (static).
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.hasNoSameDimension(matrix2)) {
-            throw new IllegalArgumentException(String.format("РЎР»РѕР¶РёС‚СЊ 2 РїРµСЂРµРґР°РЅРЅС‹Рµ РјР°С‚СЂРёС†С‹ РЅРµР»СЊР·СЏ, С‚.Рє. РѕРЅРё РёРјРµСЋС‚ СЂР°Р·РЅСѓСЋ " +
-                            "СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ: (%d x %d) Рё (%d x %d).", matrix1.rows.length, matrix1.getColumnsQuantity(),
-                    matrix2.rows.length, matrix2.getColumnsQuantity()));
-        }
+        matrix1.hasSameDimension(matrix2);
 
         Matrix resultMatrix = new Matrix(matrix1);
 
-        for (int i = 0; i < matrix1.rows.length; ++i) {
-            resultMatrix.rows[i] = Vector.getSum(matrix1.rows[i], matrix2.rows[i]);
-        }
+        resultMatrix.add(matrix2);
 
         return resultMatrix;
     }
 
-    //  Р’С‹С‡РёС‚Р°РЅРёРµ РґРІСѓС… РјР°С‚СЂРёС† (static).
+    //  Вычитание двух матриц (static).
     public static Matrix getDifference(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.hasNoSameDimension(matrix2)) {
-            throw new IllegalArgumentException(String.format("РџСЂРѕРёР·РІРµСЃС‚Рё РѕРїРµСЂР°С†РёСЋ РІС‹С‡РёС‚Р°РЅРёСЏ (static) СЃ 2 РїРµСЂРµРґР°РЅРЅС‹РјРё"
-                            + " РјР°С‚СЂРёС†Р°РјРё РЅРµР»СЊР·СЏ, С‚.Рє. РѕРЅРё РёРјРµСЋС‚ СЂР°Р·РЅСѓСЋ СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ: (%d x %d) Рё (%d x %d).",
-                    matrix1.rows.length, matrix1.getColumnsQuantity(), matrix2.rows.length, matrix2.getColumnsQuantity()));
-        }
+        matrix1.hasSameDimension(matrix2);
 
         Matrix resultMatrix = new Matrix(matrix1);
 
-        for (int i = 0; i < matrix1.rows.length; ++i) {
-            resultMatrix.rows[i] = Vector.getDifference(matrix1.rows[i], matrix2.rows[i]);
-        }
+        resultMatrix.subtract(matrix2);
 
         return resultMatrix;
     }
 
-    //  РЈРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС† (static).
+    //  Умножение матриц (static).
     public static Matrix getProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getColumnsQuantity() != matrix2.rows.length) {
-            throw new IllegalArgumentException(String.format("РџСЂРѕРёР·РІРµСЃС‚Рё СѓРјРЅРѕР¶РµРЅРёРµ (static) РїРµСЂРІРѕР№ РјР°С‚СЂРёС†С‹ РЅР° РІС‚РѕСЂСѓСЋ РЅРµР»СЊР·СЏ "
-                    + "С‚.Рє. РѕРЅРё РЅРµ СЃРѕРіР»Р°СЃРѕРІР°РЅС‹, С‚.Рµ. С‡РёСЃР»Рѕ СЃС‚РѕР»Р±С†РѕРІ РІ РїРµСЂРІРѕР№ РјР°С‚СЂРёС†Рµ (%d) РЅРµ СЂР°РІРЅРѕ С‡РёСЃР»Сѓ СЃС‚СЂРѕРє "
-                    + "РІРѕ РІС‚РѕСЂРѕР№ (%d)!", matrix1.getColumnsQuantity(), matrix2.rows.length));
+            throw new IllegalArgumentException(String.format("Произвести умножение (static) первой матрицы на вторую нельзя "
+                    + "т.к. они не согласованы, т.е. число столбцов в первой матрице (%d) не равно числу строк "
+                    + "во второй (%d)!", matrix1.getColumnsQuantity(), matrix2.rows.length));
         }
 
         Matrix resultMatrix = new Matrix(matrix1.rows.length, matrix2.getColumnsQuantity());
 
         for (int i = 0; i < resultMatrix.getRowsQuantity(); ++i) {
             for (int j = 0; j < resultMatrix.getColumnsQuantity(); ++j) {
-                resultMatrix.rows[i].setElement(j, Vector.getScalarProduct(matrix1.getRowByIndex(i), matrix2.getColumnByIndex(j)));
+                resultMatrix.rows[i].setElement(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumnByIndex(j)));
             }
         }
 
