@@ -8,8 +8,8 @@ public class Vector {
 
     public Vector(int size) {
         if (size <= 0) {
-            throw new IllegalArgumentException(String.format("Размерность массива вектора должна быть > 0. "
-                    + "Сейчас size = %d ", size));
+            throw new IllegalArgumentException(String.format("Размерность создаваемого вектора (size) должна быть > 0. "
+                    + "В конструктор передано значение size = %d.", size));
         }
 
         elements = new double[size];
@@ -21,7 +21,7 @@ public class Vector {
 
     public Vector(double[] elements) {
         if (elements.length == 0) {
-            throw new IllegalArgumentException("Передаваемый в качестве аргумента массив пуст!");
+            throw new IllegalArgumentException("Передаваемый в конструктор массив пуст!");
         }
 
         this.elements = Arrays.copyOf(elements, elements.length);
@@ -29,8 +29,8 @@ public class Vector {
 
     public Vector(int size, double[] elements) {
         if (size <= 0) {
-            throw new IllegalArgumentException(String.format("Размерность массива создаваемого вектора (size) "
-                    + "должна быть > 0. Сейчас size = %d ", size));
+            throw new IllegalArgumentException(String.format("Размерность создаваемого вектора (size) должна быть > 0. "
+                    + "В конструктор передано значение size = %d.", size));
         }
 
         this.elements = Arrays.copyOf(elements, size);
@@ -125,13 +125,13 @@ public class Vector {
 
     //  Получение длины вектора.
     public double getLength() {
-        double Sum = 0;
+        double sum = 0;
 
         for (double e : elements) {
-            Sum += e * e;
+            sum += e * e;
         }
 
-        return Math.sqrt(Sum);
+        return Math.sqrt(sum);
     }
 
     //  Сложение двух векторов (static).
