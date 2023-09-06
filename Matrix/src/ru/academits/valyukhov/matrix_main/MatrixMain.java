@@ -12,7 +12,7 @@ public class MatrixMain {
         System.out.println();
     }
 
-    //  Метод печати в консоль вектора в столбец (для печати вектора-столбца).
+    // Метод печати в консоль вектора в столбец (для печати вектора-столбца).
     public static void printColumn(Vector column) {
         for (int i = 0; i < column.getSize(); ++i) {
             System.out.printf("%.2f%n", column.getElement(i));
@@ -22,10 +22,10 @@ public class MatrixMain {
     }
 
     public static void main(String[] args) {
-        //  Используем конструктор Matrix(n, m) – матрица нулей размера nxm.
+        // Используем конструктор Matrix(n, m) – матрица нулей размера nxm.
         Matrix matrix = new Matrix(2, 3);
 
-        //  Используем переопределённый метод toString.
+        // Используем переопределённый метод toString.
         System.out.println(matrix);
         System.out.printf("У этой матрицы количество строк - %d, количество столбцов - %d.%n",
                 matrix.getRowsQuantity(), matrix.getColumnsQuantity());
@@ -33,7 +33,7 @@ public class MatrixMain {
 
         System.out.println("Создадим новую матрицу №1:");
 
-        //  Используем конструктор Matrix(Vector[]) – из массива векторов-строк.
+        // Используем конструктор Matrix(Vector[]) – из массива векторов-строк.
         Matrix matrix1 = new Matrix(new Vector[]{
                 new Vector(new double[]{1}),
                 new Vector(new double[]{2, 2}),
@@ -73,7 +73,7 @@ public class MatrixMain {
         printColumn(matrix1.multiplyByVector(columnVectorMultiplier));
 
         System.out.println("Создадим матрицу №2:");
-        //  Используем конструктор Matrix(double[][]).
+        // Используем конструктор Matrix(double[][]).
         Matrix matrix2 = new Matrix(new double[][]{{4, 4, 4, 4}, {3, 3, 3}, {2, 2}, {1}});
         print(matrix2);
 
