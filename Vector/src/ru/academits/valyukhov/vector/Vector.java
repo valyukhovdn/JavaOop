@@ -36,17 +36,17 @@ public class Vector {
         this.elements = Arrays.copyOf(elements, size);
     }
 
-    //  Получение одного элемента вектора по индексу.
+    // Получение одного элемента вектора по индексу.
     public double getElement(int index) {
         return elements[index];
     }
 
-    //  Установка элемента вектора по индексу.
+    // Установка элемента вектора по индексу.
     public void setElement(int index, double element) {
         elements[index] = element;
     }
 
-    //  Получение размера массива элементов данного вектора.
+    // Получение размера массива элементов данного вектора.
     public int getSize() {
         return elements.length;
     }
@@ -89,7 +89,7 @@ public class Vector {
         return Arrays.equals(elements, vector.elements);
     }
 
-    //  Прибавление к вектору другого вектора.
+    // Прибавление к вектору другого вектора.
     public void add(Vector vector) {
         if (elements.length < vector.elements.length) {
             elements = Arrays.copyOf(elements, vector.elements.length);
@@ -100,7 +100,7 @@ public class Vector {
         }
     }
 
-    //  Вычитание из вектора другого вектора.
+    // Вычитание из вектора другого вектора.
     public void subtract(Vector vector) {
         if (elements.length < vector.elements.length) {
             elements = Arrays.copyOf(elements, vector.elements.length);
@@ -111,19 +111,19 @@ public class Vector {
         }
     }
 
-    //  Умножение вектора на скаляр.
+    // Умножение вектора на скаляр.
     public void multiplyByScalar(double scalar) {
         for (int i = 0; i < elements.length; ++i) {
             elements[i] *= scalar;
         }
     }
 
-    //  Разворот вектора (умножение всех элементов на -1).
+    // Разворот вектора (умножение всех элементов на -1).
     public void reverse() {
         multiplyByScalar(-1);
     }
 
-    //  Получение длины вектора.
+    // Получение длины вектора.
     public double getLength() {
         double sum = 0;
 
@@ -134,7 +134,7 @@ public class Vector {
         return Math.sqrt(sum);
     }
 
-    //  Сложение двух векторов (static).
+    // Сложение двух векторов (static).
     public static Vector getSum(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(Math.max(vector1.elements.length, vector2.elements.length), vector1.elements);
 
@@ -143,7 +143,7 @@ public class Vector {
         return resultVector;
     }
 
-    //  Вычитание вектора (static).
+    // Вычитание вектора (static).
     public static Vector getDifference(Vector vector1, Vector vector2) {
         Vector resultVector = new Vector(Math.max(vector1.elements.length, vector2.elements.length), vector1.elements);
 
@@ -152,7 +152,7 @@ public class Vector {
         return resultVector;
     }
 
-    //  Скалярное произведение векторов.
+    // Скалярное произведение векторов.
     public static double getScalarProduct(Vector vector1, Vector vector2) {
         double result = 0;
         int minVectorSize = Math.min(vector1.elements.length, vector2.elements.length);
