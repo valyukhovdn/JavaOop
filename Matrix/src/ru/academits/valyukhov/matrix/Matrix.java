@@ -85,8 +85,8 @@ public class Matrix {
         StringBuilder sb = new StringBuilder();
         sb.append('{');
 
-        for (Vector line : rows) {
-            sb.append(line).append(", ");
+        for (Vector row : rows) {
+            sb.append(row).append(", ");
         }
 
         sb.delete(sb.length() - 2, sb.length());
@@ -282,7 +282,7 @@ public class Matrix {
     // Умножение матриц (static).
     public static Matrix getProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getColumnsQuantity() != matrix2.rows.length) {
-            throw new IllegalArgumentException(String.format("Произвести умножение (static) первой матрицы на вторую нельзя "
+            throw new IllegalArgumentException(String.format("Произвести умножение первой матрицы на вторую нельзя "
                     + "т.к. они не согласованы, т.е. число столбцов в первой матрице (%d) не равно числу строк "
                     + "во второй (%d)!", matrix1.getColumnsQuantity(), matrix2.rows.length));
         }
