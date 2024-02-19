@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ArrayListHome {
-    // 1. Метод чтения в список всех строк из файла.
+    // 1. РњРµС‚РѕРґ С‡С‚РµРЅРёСЏ РІ СЃРїРёСЃРѕРє РІСЃРµС… СЃС‚СЂРѕРє РёР· С„Р°Р№Р»Р°.
     public static ArrayList<String> getLinesFromFile(String filePath) throws IOException {
         ArrayList<String> linesList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            System.out.println("РЎРїРёСЃРѕРє СЃС‚СЂРѕРє РёР· РїРµСЂРµРґР°РЅРЅРѕРіРѕ С„Р°Р№Р»Р°:");
+
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -20,7 +22,7 @@ public class ArrayListHome {
         return linesList;
     }
 
-    // 2. Метод удаления чётных чисел из списка на массиве.
+    // 2. РњРµС‚РѕРґ СѓРґР°Р»РµРЅРёСЏ С‡С‘С‚РЅС‹С… С‡РёСЃРµР» РёР· СЃРїРёСЃРєР° РЅР° РјР°СЃСЃРёРІРµ.
     public static void removeEvenNumbers(ArrayList<Integer> list) {
         for (int i = 0; i < list.size(); ++i) {
             if (list.get(i) % 2 == 0) {
@@ -30,7 +32,7 @@ public class ArrayListHome {
         }
     }
 
-    // 3. Метод создания нового списка, в котором будут элементы переданного списка в таком же порядке, но без повторений.
+    // 3. РњРµС‚РѕРґ СЃРѕР·РґР°РЅРёСЏ РЅРѕРІРѕРіРѕ СЃРїРёСЃРєР°, РІ РєРѕС‚РѕСЂРѕРј Р±СѓРґСѓС‚ СЌР»РµРјРµРЅС‚С‹ РїРµСЂРµРґР°РЅРЅРѕРіРѕ СЃРїРёСЃРєР° РІ С‚Р°РєРѕРј Р¶Рµ РїРѕСЂСЏРґРєРµ, РЅРѕ Р±РµР· РїРѕРІС‚РѕСЂРµРЅРёР№.
     public static ArrayList<Integer> getListWithoutDuplicates(ArrayList<Integer> list) {
         ArrayList<Integer> listWithoutDuplicates = new ArrayList<>(list.size());
 
@@ -43,34 +45,33 @@ public class ArrayListHome {
         return listWithoutDuplicates;
     }
 
-    public static void main(String[] args) throws IOException {
-        // 1. Читаем в список все строки из файла.
-        System.out.println("Список строк из переданного файла:");
-
+    public static void main(String[] args){
+        // 1. Р§РёС‚Р°РµРј РІ СЃРїРёСЃРѕРє РІСЃРµ СЃС‚СЂРѕРєРё РёР· С„Р°Р№Р»Р°.
         try {
-            for (String line : getLinesFromFile("ArrayListHome_input.txt")) {
+            for (String line : getLinesFromFile("C:\\Users\\User\\IdeaProjects\\JavaOop\\ArrayListHome_input.txt")) {
                 System.out.println(line);
             }
 
             System.out.println();
-        } catch (FileNotFoundException e) {
-            System.out.println("Возникла ошибка: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Р’РѕР·РЅРёРєР»Р° РѕС€РёР±РєР°: " + e.getMessage());
+            System.out.println();
         }
 
-        // 2. з списка на массиве целых чисел оставляем только нечётные.
-        System.out.println("сходный список целых чисел:");
+        // 2. РР· СЃРїРёСЃРєР° РЅР° РјР°СЃСЃРёРІРµ С†РµР»С‹С… С‡РёСЃРµР» РѕСЃС‚Р°РІР»СЏРµРј С‚РѕР»СЊРєРѕ РЅРµС‡С‘С‚РЅС‹Рµ.
+        System.out.println("РСЃС…РѕРґРЅС‹Р№ СЃРїРёСЃРѕРє С†РµР»С‹С… С‡РёСЃРµР»:");
         ArrayList<Integer> list = new ArrayList<>(
                 Arrays.asList(-2, -2, -1, 0, 0, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 8, 9, 10));
         System.out.println(list);
         System.out.println();
 
-        System.out.println("сходный список без чётных чисел:");
+        System.out.println("РСЃС…РѕРґРЅС‹Р№ СЃРїРёСЃРѕРє Р±РµР· С‡С‘С‚РЅС‹С… С‡РёСЃРµР»:");
         removeEvenNumbers(list);
         System.out.println(list);
         System.out.println();
 
-        // 3. Создаём новый список, в котором будут элементы переданного списка в таком же порядке, но без повторений.
-        System.out.println("Создаём новый список c теми же элементами, в том же порядке, но без повторений:");
+        // 3. РЎРѕР·РґР°С‘Рј РЅРѕРІС‹Р№ СЃРїРёСЃРѕРє, РІ РєРѕС‚РѕСЂРѕРј Р±СѓРґСѓС‚ СЌР»РµРјРµРЅС‚С‹ РїРµСЂРµРґР°РЅРЅРѕРіРѕ СЃРїРёСЃРєР° РІ С‚Р°РєРѕРј Р¶Рµ РїРѕСЂСЏРґРєРµ, РЅРѕ Р±РµР· РїРѕРІС‚РѕСЂРµРЅРёР№.
+        System.out.println("РЎРѕР·РґР°С‘Рј РЅРѕРІС‹Р№ СЃРїРёСЃРѕРє c С‚РµРјРё Р¶Рµ СЌР»РµРјРµРЅС‚Р°РјРё, РІ С‚РѕРј Р¶Рµ РїРѕСЂСЏРґРєРµ, РЅРѕ Р±РµР· РїРѕРІС‚РѕСЂРµРЅРёР№:");
         System.out.println(getListWithoutDuplicates(list));
     }
 }
