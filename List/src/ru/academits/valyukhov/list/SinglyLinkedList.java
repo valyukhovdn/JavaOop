@@ -1,177 +1,153 @@
 package ru.academits.valyukhov.list;
 
-public class SinglyLinkedList {
+import java.util.NoSuchElementException;
 
-    public Node<Integer> head;
+public class SinglyLinkedList<E> {
+    private Node<E> head;
     private int size;
-
-    public SinglyLinkedList() {
-    }
 
     // Получение размера списка из переменной size.
     public int getSize() {
         return size;
     }
 
-    // Получение размера списка из путём перебора его узлов.
-    public int getSizeByIteratingNodes() {
-        if (head == null) {
-            return 0;
+    @Override
+    public String toString() {
+        if (size == 0) {
+            return "Список пуст.";
         }
 
-        int currentIndex = 1;
-        Node<Integer> currentNode = head;
+        Node<E> currentNode = head;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('{');
 
         while (currentNode.hasNext()) {
-            ++currentIndex;
+            stringBuilder.append(currentNode.getData()).append(", ");
             currentNode = currentNode.getNext();
         }
 
-        return currentIndex;
+        stringBuilder.append(currentNode.getData());
+        stringBuilder.append('}');
+
+        return stringBuilder.toString();
+    }
+
+    // Вспомогательный метод получения элемента по индексу.
+    private Node<E> getElement(int index) {
+        int currentIndex = 0;
+        Node<E> element = head;
+
+        while (currentIndex != index) {
+            ++currentIndex;
+            element = element.getNext();
+        }
+
+        return element;
+    }
+
+    // Вспомогательный метод проверки индекса на допустимые значения.
+    private void checkIndex(int index) {
+        if (size == 0) {
+            throw new NoSuchElementException("Попытка метода обратиться к элементу по индексу в пустом списке.");
+        }
+
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(String.format("Попытка метода обратиться к элементу по несуществующему "
+                    + "индексу \"%d\", а в списке элементы с индексами от \"0\" до \"%d\".", index, size - 1));
+        }
     }
 
     // Получение значения первого элемента.
-    public int getFistNodeData() {
-        if (head == null) {
-            throw new NullPointerException("Попытка получить первый элемент из пустого списка.");
+    public E getFirst() {
+        if (size == 0) {
+            throw new NoSuchElementException("Попытка получить первый элемент из пустого списка.");
         }
 
         return head.getData();
     }
 
-    // Получение значения по указанному индексу.
-    public int getDataByIndex(int index) {
-        if (size == 0) {
-            throw new IllegalArgumentException("Попытка получить значение узла по индексу в пустом списке.");
-        }
+    // Получение значения элемента по указанному индексу.
+    public E get(int index) {
+        checkIndex(index);
 
-        if (index < 0 || size - 1 < index) {
-            throw new IndexOutOfBoundsException(String.format("Попытка получить значение узла по несуществующему индексу. "
-                    + "В списке %d элементов, а в метод \"getDataByIndex\" передан индекс %d.", getSize(), index));
-        }
-
-        int currentIndex = 0;
-        Node<Integer> currentNode = head;
-
-        while (currentIndex != index) {
-            ++currentIndex;
-            currentNode = currentNode.getNext();
-        }
-
-        return currentNode.getData();
+        return getElement(index).getData();
     }
 
-    // Изменение значения по указанному индексу (выдает старое значение).
-    public int setDataByIndex(int index, int data) {
-        if (size == 0) {
-            throw new IllegalArgumentException("Попытка изменить значение узла по индексу в пустом списке.");
-        }
+    // Изменение значения элемента по указанному индексу (выдает старое значение).
+    public E set(int index, E data) {
+        checkIndex(index);
 
-        if (index < 0 || size - 1 < index) {
-            throw new IndexOutOfBoundsException(String.format("Попытка изменить значение узла по несуществующему индексу. "
-                    + "В списке %d элементов, а в метод \"setDataByIndex\" передан индекс %d.", getSize(), index));
-        }
+        E oldData = get(index);
 
-        int currentIndex = 0;
-        Node<Integer> currentNode = head;
+        getElement(index).setData(data);
 
-        while (currentIndex != index) {
-            ++currentIndex;
-            currentNode = currentNode.getNext();
-        }
-
-        int previousData = currentNode.getData();
-        currentNode.setData(data);
-
-        return previousData;
+        return oldData;
     }
 
     // Удаление элемента по индексу (выдаёт значение элемента).
-    public int deleteNodeByIndex(int index) {
-        if (size == 0) {
-            throw new IllegalArgumentException("Попытка удалить узел по индексу в пустом списке.");
-        }
-        if (index < 0 || size - 1 < index) {
-            throw new IndexOutOfBoundsException(String.format("Попытка удалить узел по несуществующему индексу. "
-                    + "В списке %d элементов, а в метод \"deleteNodeByIndex\" передан индекс %d.", getSize(), index));
+    public E deleteElementByIndex(int index) {
+        checkIndex(index);
+
+        if (index == 0) {                            // Удаление первого элемента.
+            return deleteFirst();
         }
 
-        if (index == 0) {                            // Удаление первого узла.
-            return deleteFirstNode();
-        } else {                                     // Удаление второго, или последующего узла.
-            int previousIndex = 0;
-            Node<Integer> previousNode = head;
+        // Удаление второго, или последующего элемента.
+        E deletedElementData = getElement(index).getData();
 
-            while (previousIndex < index - 1) {
-                ++previousIndex;
-                previousNode = previousNode.getNext();
-            }
+        Node<E> previousElement = getElement(index - 1);
+        previousElement.setNext(previousElement.getNext().getNext());
+        --size;
 
-            int deletedNodeData = previousNode.getNext().getData();
-            previousNode.setNext(previousNode.getNext().getNext());
-            --size;
-
-            return deletedNodeData;
-        }
+        return deletedElementData;
     }
 
     // Вставка элемента в начало.
-    public void insertFirstNode(Node<Integer> node) {
-        if (head == null) {          // Вставка узла в пустой список.
-            head = new Node<>(node.getData());
-        } else {                     // Вставка узла в начало НЕ пустого списка.
-            head = new Node<>(node.getData(), head);
-        }
-
+    public void insertFirst(E data) {
+        head = new Node<>(data, head);
         ++size;
     }
 
     // Вставка элемента по индексу.
-    public void insertNodeByIndex(int index, Node<Integer> node) {
+    public void insertElement(int index, E data) {
         if (size == 0 && index != 0) {
-            throw new IndexOutOfBoundsException("Попытка вставить в пустой список узел по индексу отличному от \"0\".");
+            throw new IndexOutOfBoundsException("Попытка вставить в пустой список элемент по индексу отличному от \"0\".");
         }
 
-        if (index < 0 || size < index) {
-            throw new IndexOutOfBoundsException(String.format("Попытка вставить узел по несуществующему индексу. "
-                    + "В список можно вставить узлы с индексами от \"0\" до \"%d\", а в метод \"insertNodeByIndex\" "
-                    + "передан индекс %d.", getSize(), index));     // Можно index == size, если вставляем узел в конец списка.
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(String.format("Попытка вставить в список элемент по несуществующему "
+                    + "индексу \"%d\", а в списке элементы с индексами от \"0\" до \"%d\".", index, size - 1));
         }
 
-        if (size == 0) {                       // Вставка узла по индексу "0" в пустой список.
-            head = new Node<>(node.getData());
-        } else if (index == 0) {               // Вставка узла по индексу "0" в НЕ пустой список.
-            head = new Node<>(node.getData(), head);
-        } else {                               // Вставка узла по индексу >0 в НЕ пустой список.
-            int previousIndex = 0;
-            Node<Integer> previousNode = head;
-
-            while (previousIndex < index - 1) {
-                ++previousIndex;
-                previousNode = previousNode.getNext();
-            }
-
-            if (index < size) {
-                previousNode.setNext(new Node<>(node.getData(), previousNode.getNext()));
-            } else {
-                previousNode.setNext(new Node<>(node.getData(), null));
-            }
+        // Вставка на место первого элемента списка.
+        if (index == 0) {
+            insertFirst(data);
+            return;
         }
 
+        // Вставка на место НЕ первого элемента списка.
+        getElement(index - 1).setNext(new Node<>(data, getElement(index - 1).getNext()));
         ++size;
     }
 
-    // Удаление узла по значению. Выдаёт true, если элемент был удалён.
-    public boolean deleteNodeByData(int data) {
-        if (head == null) {             // Если список пуст.
+    // Удаление элемента по значению (первое вхождение). Выдаёт true, если элемент был удалён.
+    public boolean deleteElement(E data) {
+        if (size == 0) {                 // Если список пуст.
             return false;
         }
 
-        Node<Integer> currentNode = head;
+        if (head.getData() == data) {    // Удаление первого элемента, если он содержит искомое значение.
+            deleteFirst();
+            return true;
+        }
 
-        for (int i = 0; i < size; ++i) {
-            if (currentNode.getData() == data) {
-                deleteNodeByIndex(i);
+        Node<E> currentNode = head;
+
+        while (currentNode.hasNext()) {
+            if (currentNode.getNext().getData() == data) {
+                currentNode.setNext(currentNode.getNext().getNext());
+                --size;
                 return true;
             }
 
@@ -182,74 +158,52 @@ public class SinglyLinkedList {
     }
 
     // Удаление первого элемента. Выдаёт значение элемента.
-    public int deleteFirstNode() {
+    public E deleteFirst() {
         if (size == 0) {
-            throw new IllegalArgumentException("Попытка удалить первый узел в пустом списке.");
+            throw new NoSuchElementException("Попытка удалить первый элемент из пустого списка.");
         }
 
-        int deletedNodeData = head.getData();
+        E deletedData = head.getData();
 
-        if (size == 1) {                            // Удаление единственного узла списка.
-            head = null;
-        } else {                                    // Удаление первого узла из списка, содержащего более 1 узла.
-            head = head.getNext();
-        }
-
+        head = head.getNext();
         --size;
 
-        return deletedNodeData;
+        return deletedData;
     }
 
     // Разворот списка за линейное время.
-    public void reverseList() {
-        if (size == 0 || size == 1) {
+    public void reverse() {
+        if (size <= 1) {
             return;
         }
 
-        SinglyLinkedList temporaryList = new SinglyLinkedList();
-        Node<Integer> currentNode = head;
+        int index = 0;
 
-        while (currentNode.hasNext()) {
-            temporaryList.insertFirstNode(new Node<>(currentNode.getData()));
-            currentNode = currentNode.getNext();
+        while (index < size / 2) {
+            set(index, set(size - 1 - index, get(index)));
+            ++index;
         }
-
-        temporaryList.insertFirstNode(new Node<>(currentNode.getData()));
-
-        this.head = temporaryList.head;
-    }
-
-    // Вспомогательный метод добавления узла в конец списка (копированием значения узла, переданного в метод, во вновь
-    // созданный последний узел).
-    public static void addNode(SinglyLinkedList list, Node<Integer> node) {
-        if (list.getSize() == 0) {
-            list.head = new Node<>(node.getData());
-        } else {
-            Node<Integer> currentNode = list.head;
-
-            while (currentNode.hasNext()) {
-                currentNode = currentNode.getNext();
-            }
-
-            currentNode.setNext(new Node<>(node.getData()));
-        }
-
-        ++list.size;
     }
 
     // Копирование списка.
-    public SinglyLinkedList getListDuplicate() {
-        SinglyLinkedList listDuplicate = new SinglyLinkedList();
+    public SinglyLinkedList<E> getListCopy() {
+        SinglyLinkedList<E> listCopy = new SinglyLinkedList<>();
 
-        Node<Integer> currentNode = head;
-
-        while (currentNode.hasNext()) {
-            addNode(listDuplicate, currentNode);
-            currentNode = currentNode.getNext();
+        if (size == 0) {
+            return listCopy;
         }
 
-        addNode(listDuplicate, currentNode);
+        Node<E> currentElement = head;
+        listCopy.insertFirst(head.getData());
+        Node<E> duplicateElement = listCopy.head;
 
-        return listDuplicate;
+        while (currentElement.hasNext()) {
+            currentElement = currentElement.getNext();
+            duplicateElement.setNext(new Node<>(currentElement.getData()));
+            duplicateElement = duplicateElement.getNext();
+            ++listCopy.size;
+        }
+
+        return listCopy;
     }
 }
