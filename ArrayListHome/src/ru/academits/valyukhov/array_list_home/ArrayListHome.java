@@ -10,8 +10,6 @@ public class ArrayListHome {
         ArrayList<String> linesList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            System.out.println("Список строк из переданного файла:");
-
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -45,23 +43,26 @@ public class ArrayListHome {
         return listWithoutDuplicates;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         // 1. Читаем в список все строки из файла.
         try {
-            for (String line : getLinesFromFile("C:\\Users\\User\\IdeaProjects\\JavaOop\\ArrayListHome_input.txt")) {
+            ArrayList<String> linesFromFile = getLinesFromFile("C:\\Users\\User\\IdeaProjects\\JavaOop\\ArrayListHome_input.txt");
+
+            System.out.println("Список строк из переданного файла:");
+
+            for (String line : linesFromFile) {
                 System.out.println(line);
             }
 
             System.out.println();
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("Возникла ошибка: " + e.getMessage());
             System.out.println();
         }
 
         // 2. Из списка на массиве целых чисел оставляем только нечётные.
         System.out.println("Исходный список целых чисел:");
-        ArrayList<Integer> list = new ArrayList<>(
-                Arrays.asList(-2, -2, -1, 0, 0, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 8, 9, 10));
+        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(-2, -2, -1, 0, 0, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 8, 9, 10));
         System.out.println(list);
         System.out.println();
 
