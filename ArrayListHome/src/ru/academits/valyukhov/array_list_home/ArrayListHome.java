@@ -43,10 +43,18 @@ public class ArrayListHome {
         return listWithoutDuplicates;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         // 1. Читаем в список все строки из файла.
         try {
-            ArrayList<String> linesFromFile = getLinesFromFile("C:\\Users\\User\\IdeaProjects\\JavaOop\\ArrayListHome_input.txt");
+            String filePath = "C:\\Users\\User\\IdeaProjects\\JavaOop\\ArrayListHome_input.txt";
+
+            File file = new File(filePath);
+
+            if (!file.exists()) {
+                throw new FileNotFoundException("Отсутствует файл, из которого требуется прочитать строки!");
+            }
+
+            ArrayList<String> linesFromFile = getLinesFromFile(filePath);
 
             System.out.println("Список строк из переданного файла:");
 
@@ -55,7 +63,7 @@ public class ArrayListHome {
             }
 
             System.out.println();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("Возникла ошибка: " + e.getMessage());
             System.out.println();
         }
