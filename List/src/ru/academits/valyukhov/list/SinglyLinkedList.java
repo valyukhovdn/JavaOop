@@ -14,13 +14,13 @@ public class SinglyLinkedList<E> {
     @Override
     public String toString() {
         if (size == 0) {
-            return "Список пуст.";
+            return "[]";
         }
 
         Node<E> currentNode = head;
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append('{');
+        stringBuilder.append('[');
 
         while (currentNode.hasNext()) {
             stringBuilder.append(currentNode.getData()).append(", ");
@@ -28,34 +28,30 @@ public class SinglyLinkedList<E> {
         }
 
         stringBuilder.append(currentNode.getData());
-        stringBuilder.append('}');
+        stringBuilder.append(']');
 
         return stringBuilder.toString();
     }
 
-    // Вспомогательный метод получения элемента по индексу.
-    private Node<E> getElement(int index) {
-        int currentIndex = 0;
-        Node<E> element = head;
-
-        while (currentIndex != index) {
-            ++currentIndex;
-            element = element.getNext();
-        }
-
-        return element;
-    }
-
-    // Вспомогательный метод проверки индекса на допустимые значения.
-    private void checkIndex(int index) {
+    // Вспомогательный метод получения узла по индексу.
+    private Node<E> getNode(int index) {
         if (size == 0) {
-            throw new NoSuchElementException("Попытка метода обратиться к элементу по индексу в пустом списке.");
+            throw new IndexOutOfBoundsException(String.format("Попытка метода обратиться к элементу по индексу "
+                    + "\"%d\" в пустом списке.", index));
         }
 
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(String.format("Попытка метода обратиться к элементу по несуществующему "
                     + "индексу \"%d\", а в списке элементы с индексами от \"0\" до \"%d\".", index, size - 1));
         }
+
+        Node<E> node = head;
+
+        for (int i = 0; i < index; ++i) {
+            node = node.getNext();
+        }
+
+        return node;
     }
 
     // Получение значения первого элемента.
@@ -69,38 +65,35 @@ public class SinglyLinkedList<E> {
 
     // Получение значения элемента по указанному индексу.
     public E get(int index) {
-        checkIndex(index);
-
-        return getElement(index).getData();
+        return getNode(index).getData();
     }
 
     // Изменение значения элемента по указанному индексу (выдает старое значение).
     public E set(int index, E data) {
-        checkIndex(index);
+        Node<E> targetNode = getNode(index);
 
-        E oldData = get(index);
+        E oldData = targetNode.getData();
 
-        getElement(index).setData(data);
+        targetNode.setData(data);
 
         return oldData;
     }
 
     // Удаление элемента по индексу (выдаёт значение элемента).
-    public E deleteElementByIndex(int index) {
-        checkIndex(index);
-
+    public E deleteByIndex(int index) {
         if (index == 0) {                            // Удаление первого элемента.
             return deleteFirst();
         }
 
         // Удаление второго, или последующего элемента.
-        E deletedElementData = getElement(index).getData();
+        Node<E> previousNode = getNode(index - 1);
 
-        Node<E> previousElement = getElement(index - 1);
-        previousElement.setNext(previousElement.getNext().getNext());
+        E deletedData = previousNode.getNext().getData();
+
+        previousNode.setNext(previousNode.getNext().getNext());
         --size;
 
-        return deletedElementData;
+        return deletedData;
     }
 
     // Вставка элемента в начало.
@@ -110,14 +103,10 @@ public class SinglyLinkedList<E> {
     }
 
     // Вставка элемента по индексу.
-    public void insertElement(int index, E data) {
-        if (size == 0 && index != 0) {
-            throw new IndexOutOfBoundsException("Попытка вставить в пустой список элемент по индексу отличному от \"0\".");
-        }
-
-        if (index < 0 || index >= size) {
+    public void insert(int index, E data) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(String.format("Попытка вставить в список элемент по несуществующему "
-                    + "индексу \"%d\", а в списке элементы с индексами от \"0\" до \"%d\".", index, size - 1));
+                    + "индексу \"%d\", а в списке допускается вставка элементов с индексами от \"0\" до \"%d\".", index, size));
         }
 
         // Вставка на место первого элемента списка.
@@ -127,17 +116,18 @@ public class SinglyLinkedList<E> {
         }
 
         // Вставка на место НЕ первого элемента списка.
-        getElement(index - 1).setNext(new Node<>(data, getElement(index - 1).getNext()));
+        Node<E> previousNode = getNode(index - 1);
+        previousNode.setNext(new Node<>(data, previousNode.getNext()));
         ++size;
     }
 
     // Удаление элемента по значению (первое вхождение). Выдаёт true, если элемент был удалён.
-    public boolean deleteElement(E data) {
+    public boolean delete(E data) {
         if (size == 0) {                 // Если список пуст.
             return false;
         }
 
-        if (head.getData() == data) {    // Удаление первого элемента, если он содержит искомое значение.
+        if (head.getData().equals(data)) {    // Удаление первого элемента, если он содержит искомое значение.
             deleteFirst();
             return true;
         }
@@ -145,7 +135,7 @@ public class SinglyLinkedList<E> {
         Node<E> currentNode = head;
 
         while (currentNode.hasNext()) {
-            if (currentNode.getNext().getData() == data) {
+            if (currentNode.getNext().getData().equals(data)) {
                 currentNode.setNext(currentNode.getNext().getNext());
                 --size;
                 return true;
@@ -177,32 +167,43 @@ public class SinglyLinkedList<E> {
             return;
         }
 
-        int index = 0;
+        @SuppressWarnings("unchecked")
+        E[] tempArray = (E[]) new Object[size];
 
-        while (index < size / 2) {
-            set(index, set(size - 1 - index, get(index)));
-            ++index;
+        Node<E> currentNode = head;
+
+        for (int i = 0; i < size; ++i) {
+            tempArray[i] = currentNode.getData();
+            currentNode = currentNode.getNext();
+        }
+
+        currentNode = head;
+
+        for (int i = size - 1; i >= 0; --i) {
+            currentNode.setData(tempArray[i]);
+            currentNode = currentNode.getNext();
         }
     }
 
     // Копирование списка.
-    public SinglyLinkedList<E> getListCopy() {
+    public SinglyLinkedList<E> getCopy() {
         SinglyLinkedList<E> listCopy = new SinglyLinkedList<>();
 
         if (size == 0) {
             return listCopy;
         }
 
-        Node<E> currentElement = head;
+        Node<E> currentNode = head;
         listCopy.insertFirst(head.getData());
-        Node<E> duplicateElement = listCopy.head;
+        Node<E> elementCopy = listCopy.head;
 
-        while (currentElement.hasNext()) {
-            currentElement = currentElement.getNext();
-            duplicateElement.setNext(new Node<>(currentElement.getData()));
-            duplicateElement = duplicateElement.getNext();
-            ++listCopy.size;
+        while (currentNode.hasNext()) {
+            currentNode = currentNode.getNext();
+            elementCopy.setNext(new Node<>(currentNode.getData()));
+            elementCopy = elementCopy.getNext();
         }
+
+        listCopy.size = size;
 
         return listCopy;
     }

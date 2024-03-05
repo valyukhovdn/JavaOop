@@ -32,7 +32,7 @@ public class ListMain {
 
         int deleteNodeIndex = 0;
         System.out.printf("Удалим из списка элемент с индексом \"%d\", который содержал значение \"%d\".%n", deleteNodeIndex,
-                list.deleteElementByIndex(deleteNodeIndex));
+                list.deleteByIndex(deleteNodeIndex));
         System.out.println("Список принял вид:");
         System.out.println(list);
         System.out.println("Текущий размер списка: " + list.getSize());
@@ -41,7 +41,7 @@ public class ListMain {
         int insertIndex = 7;
         Integer insertData = 100;
         System.out.printf("Вставим в список элемент со значением \"%d\" по индексу \"%d\".%n", insertData, insertIndex);
-        list.insertElement(insertIndex, insertData);
+        list.insert(insertIndex, insertData);
         System.out.println("Список принял вид:");
         System.out.println(list);
         System.out.println("Текущий размер списка: " + list.getSize());
@@ -49,7 +49,7 @@ public class ListMain {
 
         int deleteElement = 7;
         System.out.printf("Попытаемся удалить из списка элемент со значением \"%d\".%n", deleteElement);
-        System.out.printf(list.deleteElement(deleteElement) ? "Элемент со значением \"%d\" успешно удалён.%n"
+        System.out.printf(list.delete(deleteElement) ? "Элемент со значением \"%d\" успешно удалён.%n"
                 : "Элемент со значением \"%d\" в списке не найден.%n", deleteElement, deleteElement);
         System.out.println("Список имеет вид:");
         System.out.println(list);
@@ -70,7 +70,7 @@ public class ListMain {
         System.out.println();
 
         System.out.println("Создадим дубликат списка:");
-        SinglyLinkedList<Integer> listDuplicate = list.getListCopy();
+        SinglyLinkedList<Integer> listDuplicate = list.getCopy();
         System.out.println(listDuplicate);
         System.out.println("Размер дубликата: " + listDuplicate.getSize());
         System.out.println();
