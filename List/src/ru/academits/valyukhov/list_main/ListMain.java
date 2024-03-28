@@ -39,7 +39,7 @@ public class ListMain {
         System.out.println();
 
         int insertIndex = 7;
-        Integer insertData = 100;
+        Integer insertData = null;
         System.out.printf("Вставим в список элемент со значением \"%d\" по индексу \"%d\".%n", insertData, insertIndex);
         list.insert(insertIndex, insertData);
         System.out.println("Список принял вид:");
@@ -47,7 +47,7 @@ public class ListMain {
         System.out.println("Текущий размер списка: " + list.getSize());
         System.out.println();
 
-        int deleteElement = 7;
+        Integer deleteElement = null;
         System.out.printf("Попытаемся удалить из списка элемент со значением \"%d\".%n", deleteElement);
         System.out.printf(list.delete(deleteElement) ? "Элемент со значением \"%d\" успешно удалён.%n"
                 : "Элемент со значением \"%d\" в списке не найден.%n", deleteElement, deleteElement);

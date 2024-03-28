@@ -34,6 +34,11 @@ public class SinglyLinkedList<E> {
     }
 
     private void checkIndex(int index) {
+        if (size == 0) {
+            throw new IndexOutOfBoundsException(String.format("Попытка метода обратиться к элементу по индексу "
+                    + "\"%d\" в пустом списке.", index));
+        }
+
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(String.format("Попытка метода обратиться к элементу по несуществующему "
                     + "индексу \"%d\", а в списке элементы с индексами от \"0\" до \"%d\".", index, size - 1));
@@ -42,13 +47,6 @@ public class SinglyLinkedList<E> {
 
     // Вспомогательный метод получения узла по индексу.
     private Node<E> getNode(int index) {
-        if (size == 0) {
-            throw new IndexOutOfBoundsException(String.format("Попытка метода обратиться к элементу по индексу "
-                    + "\"%d\" в пустом списке.", index));
-        }
-
-        checkIndex(index);
-
         Node<E> node = head;
 
         for (int i = 0; i < index; ++i) {
@@ -69,22 +67,28 @@ public class SinglyLinkedList<E> {
 
     // Получение значения элемента по указанному индексу.
     public E get(int index) {
+        checkIndex(index);
+
         return getNode(index).getData();
     }
 
     // Изменение значения элемента по указанному индексу (выдает старое значение).
     public E set(int index, E data) {
-        Node<E> targetNode = getNode(index);
+        checkIndex(index);
 
-        E oldData = targetNode.getData();
+        Node<E> Node = getNode(index);
 
-        targetNode.setData(data);
+        E oldData = Node.getData();
+
+        Node.setData(data);
 
         return oldData;
     }
 
     // Удаление элемента по индексу (выдаёт значение элемента).
     public E deleteByIndex(int index) {
+        checkIndex(index);
+
         if (index == 0) {                            // Удаление первого элемента.
             return deleteFirst();
         }
@@ -131,7 +135,7 @@ public class SinglyLinkedList<E> {
             return false;
         }
 
-        if (head.getData() == data || head.getData().equals(data)) {    // Удаление первого элемента, если он содержит искомое значение.
+        if (head.getData() == data || (head.getData() != null && head.getData().equals(data))) {    // Удаление первого элемента, если он содержит искомое значение.
             deleteFirst();
             return true;
         }
@@ -139,7 +143,7 @@ public class SinglyLinkedList<E> {
         Node<E> currentNode = head;
 
         while (currentNode.hasNext()) {
-            if (currentNode.getNext().getData() == data || currentNode.getNext().getData().equals(data)) {
+            if (currentNode.getNext().getData() == data || (currentNode.getNext().getData() != null && currentNode.getNext().getData().equals(data))) {
                 currentNode.setNext(currentNode.getNext().getNext());
                 --size;
                 return true;
@@ -171,16 +175,16 @@ public class SinglyLinkedList<E> {
             return;
         }
 
-        Node<E> previouseNode = null;
+        Node<E> previousNode = null;
         Node<E> currentNode = head;
         Node<E> nextNode = currentNode.getNext();
-        currentNode.setNext(previouseNode);
+        currentNode.setNext(previousNode);
 
         while (nextNode != null) {
-            previouseNode = currentNode;
+            previousNode = currentNode;
             currentNode = nextNode;
             nextNode = nextNode.getNext();
-            currentNode.setNext(previouseNode);
+            currentNode.setNext(previousNode);
         }
 
         head = currentNode;
