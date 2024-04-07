@@ -1,6 +1,7 @@
 package ru.academits.valyukhov.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SinglyLinkedList<E> {
     private Node<E> head;
@@ -76,11 +77,11 @@ public class SinglyLinkedList<E> {
     public E set(int index, E data) {
         checkIndex(index);
 
-        Node<E> Node = getNode(index);
+        Node<E> node = getNode(index);
 
-        E oldData = Node.getData();
+        E oldData = node.getData();
 
-        Node.setData(data);
+        node.setData(data);
 
         return oldData;
     }
@@ -135,7 +136,7 @@ public class SinglyLinkedList<E> {
             return false;
         }
 
-        if (head.getData() == data || (head.getData() != null && head.getData().equals(data))) {    // Удаление первого элемента, если он содержит искомое значение.
+        if (Objects.equals(head.getData(), data)) {    // Удаление первого элемента, если он содержит искомое значение.
             deleteFirst();
             return true;
         }
@@ -143,7 +144,7 @@ public class SinglyLinkedList<E> {
         Node<E> currentNode = head;
 
         while (currentNode.hasNext()) {
-            if (currentNode.getNext().getData() == data || (currentNode.getNext().getData() != null && currentNode.getNext().getData().equals(data))) {
+            if (Objects.equals(currentNode.getNext().getData(), data)) {
                 currentNode.setNext(currentNode.getNext().getNext());
                 --size;
                 return true;
@@ -177,17 +178,15 @@ public class SinglyLinkedList<E> {
 
         Node<E> previousNode = null;
         Node<E> currentNode = head;
-        Node<E> nextNode = currentNode.getNext();
-        currentNode.setNext(previousNode);
 
-        while (nextNode != null) {
+        while (currentNode != null) {
+            Node<E> nextNode = currentNode.getNext();
+            currentNode.setNext(previousNode);
             previousNode = currentNode;
             currentNode = nextNode;
-            nextNode = nextNode.getNext();
-            currentNode.setNext(previousNode);
         }
 
-        head = currentNode;
+        head = previousNode;
     }
 
     // Копирование списка.
@@ -199,13 +198,13 @@ public class SinglyLinkedList<E> {
         }
 
         listCopy.insertFirst(head.getData());
-        Node<E> nodeCopy = listCopy.head;
-        Node<E> currentNode = head;
+        Node<E> currentListCopyNode = listCopy.head;
+        Node<E> currentNode = head.getNext();
 
-        while (currentNode.hasNext()) {
+        while (currentNode != null) {
+            currentListCopyNode.setNext(new Node<>(currentNode.getData()));
+            currentListCopyNode = currentListCopyNode.getNext();
             currentNode = currentNode.getNext();
-            nodeCopy.setNext(new Node<>(currentNode.getData()));
-            nodeCopy = nodeCopy.getNext();
         }
 
         listCopy.size = size;
