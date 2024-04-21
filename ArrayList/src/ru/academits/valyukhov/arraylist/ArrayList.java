@@ -3,20 +3,21 @@ package ru.academits.valyukhov.arraylist;
 import java.util.*;
 
 public class ArrayList<E> implements List<E> {
+    private static final int DEFAULT_CAPACITY = 10;
+
     private E[] items;
-    private static final int capacity = 10;
     private int size;
     private int modCount;
 
     public ArrayList() {
         //noinspection unchecked
-        items = (E[]) new Object[capacity];
+        items = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayList(int initialCapacity) {
         if (initialCapacity < 0) {
-            throw new IllegalArgumentException("В конструктор передано отрицательное значение аргумента (" + initialCapacity + "), "
-                    + "задающего начальный размер списка!");
+            throw new IllegalArgumentException("В конструктор передана отрицательная вместимость списка (" + initialCapacity + "), "
+                    + "что недопустимо.");
         }
 
         //noinspection unchecked
@@ -53,7 +54,7 @@ public class ArrayList<E> implements List<E> {
     private void increaseCapacity() {
         if (items.length == 0) {
             //noinspection unchecked
-            items = (E[]) new Objects[capacity];
+            items = (E[]) new Objects[DEFAULT_CAPACITY];
         } else {
             items = Arrays.copyOf(items, items.length * 2);
         }
@@ -123,12 +124,13 @@ public class ArrayList<E> implements List<E> {
         }
 
         remove(index);
+
         return true;
     }
 
     private class ArrayListIterator implements Iterator<E> {
         private int currentIndex = -1;
-        private final int initialModCountValue = modCount;
+        private final int initialModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -137,12 +139,12 @@ public class ArrayList<E> implements List<E> {
 
         @Override
         public E next() {
-            if (initialModCountValue != modCount) {
-                throw new ConcurrentModificationException("За время обхода Итератором список изменился!");
+            if (initialModCount != modCount) {
+                throw new ConcurrentModificationException("За время обхода итератором список изменился.");
             }
 
             if (!hasNext()) {
-                throw new NoSuchElementException("Итератор дошёл до конца списка. Следующего элемента нет!");
+                throw new NoSuchElementException("Итератор дошёл до конца списка. Следующего элемента нет.");
             }
 
             ++currentIndex;
@@ -152,10 +154,6 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        if (c.isEmpty()) {
-            return true;
-        }
-
         for (Object o : c) {
             if (!contains(o)) {
                 return false;
@@ -181,15 +179,17 @@ public class ArrayList<E> implements List<E> {
             return false;
         }
 
+        ensureCapacity(size + c.size());
+
+        System.arraycopy(items, index, items, index + c.size(), size - index);
+
         size += c.size();
 
-        ensureCapacity(size);
-
-        System.arraycopy(items, index, items, index + c.size(), size - index - c.size());
+        int currentIndex = index;
 
         for (E o : c) {
-            set(index, o);
-            ++index;
+            items[currentIndex] = o;
+            ++currentIndex;
         }
 
         ++modCount;
@@ -222,11 +222,8 @@ public class ArrayList<E> implements List<E> {
         }
 
         if (c.isEmpty()) {
-            for (int i = 0; i < size; ++i) {
-                items[i] = null;
-            }
+            clear();
 
-            size = 0;
             return true;
         }
 
@@ -248,9 +245,7 @@ public class ArrayList<E> implements List<E> {
             return;
         }
 
-        for (int i = 0; i < size; ++i) {
-            items[i] = null;
-        }
+        Arrays.fill(items, null);
 
         size = 0;
         ++modCount;
@@ -259,7 +254,7 @@ public class ArrayList<E> implements List<E> {
     // Вспомогательный метод проверки индекса на допустимые значения.
     private void checkIndex(int index) {
         if (size == 0) {
-            throw new IndexOutOfBoundsException("Попытка обратиться к элементу по индексу \"" + index + "\" в пустом списке!");
+            throw new IndexOutOfBoundsException("Попытка обратиться к элементу по индексу \"" + index + "\" в пустом списке.");
         }
 
         if (index < 0 || index >= size) {
@@ -281,8 +276,6 @@ public class ArrayList<E> implements List<E> {
 
         E oldItem = items[index];
         items[index] = item;
-
-        ++modCount;
 
         return oldItem;
     }

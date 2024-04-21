@@ -30,19 +30,19 @@ public class ArrayListMain {
         }
 
         System.out.println(Arrays.toString(integersArray));
-        System.out.println("А теперь вставим в него значения Списка №1, воспользовавшись методом \"public <T> T[] toArray(T[] a)\".");
+        System.out.println("А теперь вставим в него значения Списка №1, воспользовавшись методом \"public <T> T[] toArray(T[] a)\"");
         System.out.println("Массив принял вид:");
         integersArray = integersList1.toArray(integersArray);
         System.out.println(Arrays.toString(integersArray));
         System.out.println();
 
         Integer itemForDelete = 4;
-        System.out.println("Попытаемся удалить из списка элемент со значением \"" + itemForDelete + "\".");
+        System.out.println("Попытаемся удалить из списка элемент со значением \"" + itemForDelete + "\"");
 
         if (!integersList1.contains(itemForDelete)) {
-            System.out.println("Удаление невозможно, т.к. такой элемент в Списке №1 отсутствует.");
+            System.out.println("Удаление невозможно, т.к. такой элемент в Списке №1 отсутствует");
         } else {
-            System.out.println("Такой элемент в Списке №1 содержится.");
+            System.out.println("Такой элемент в Списке №1 содержится");
 
             if (integersList1.remove(itemForDelete)) {
                 System.out.println("Элемент со значением \"" + itemForDelete + "\" успешно удалён, а Список №1 принял вид:");
@@ -54,7 +54,7 @@ public class ArrayListMain {
 
         Integer insertItem = null;
         int insertIndex = 6;
-        System.out.println("Вставим в список элемент со значением \"" + insertItem + "\" по индексу \"" + insertIndex + "\".");
+        System.out.println("Вставим в список элемент со значением \"" + insertItem + "\" по индексу \"" + insertIndex + "\"");
         integersList1.add(insertIndex, insertItem);
         System.out.println("Список №1 принял вид:");
         System.out.println(integersList1);
@@ -67,8 +67,8 @@ public class ArrayListMain {
 
         int setIndex = 0;
         Integer setValue = 1000;
-        System.out.println("Установим в Списке №1 по индексу \"" + setIndex + "\" значение \"" + setValue + "\".");
-        System.out.println("Прежнее значение по этому индексу было \"" + integersList1.set(setIndex, setValue) + "\".");
+        System.out.println("Установим в Списке №1 по индексу \"" + setIndex + "\" значение \"" + setValue + "\"");
+        System.out.println("Прежнее значение по этому индексу было \"" + integersList1.set(setIndex, setValue) + "\"");
         System.out.println("Список №1 принял вид:");
         System.out.println(integersList1);
         System.out.println();
@@ -83,12 +83,12 @@ public class ArrayListMain {
         Integer searchedItem = null;
         int firstIndexOfItem = integersList1.indexOf(searchedItem);
         System.out.println("Первое вхождение в Список №1 элемента со значением \"" + searchedItem + "\" "
-                + (firstIndexOfItem == -1 ? "определить невозможно, т.к. такого элемента в списке нет."
-                : "по индексу \"" + firstIndexOfItem + "\"."));
+                + (firstIndexOfItem == -1 ? "определить невозможно, т.к. такого элемента в списке нет"
+                : "по индексу \"" + firstIndexOfItem + "\""));
 
         int lastIndexOfItem = integersList1.lastIndexOf(searchedItem);
         System.out.println("Последнее вхождение в Список №1 элемента со значением \"" + searchedItem + "\" "
-                + (lastIndexOfItem == -1 ? "определить невозможно, т.к. такого элемента в списке нет."
+                + (lastIndexOfItem == -1 ? "определить невозможно, т.к. такого элемента в списке нет"
                 : "по индексу \"" + lastIndexOfItem + "\"."));
 
         System.out.println();
@@ -106,7 +106,7 @@ public class ArrayListMain {
         System.out.println();
 
         System.out.println("Список №1" + (integersList1.containsAll(integersList2) ? " " : " НЕ ") + "содержит в себе все "
-                + "элементы Списка №2.");
+                + "элементы Списка №2");
         System.out.println();
 
         System.out.println("Добавим в конец Списка №1 Список №2");
@@ -149,7 +149,7 @@ public class ArrayListMain {
         System.out.println(integersList3);
         System.out.println();
 
-        System.out.println("Удалим из Списка №4 все элементы.");
+        System.out.println("Удалим из Списка №4 все элементы");
         integersList4.clear();
         System.out.println("Список №4 принял вид:");
         System.out.println(integersList4);
