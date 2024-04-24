@@ -37,7 +37,7 @@ public class ArrayListMain {
         System.out.println();
 
         Integer itemForDelete = 4;
-        System.out.println("Попытаемся удалить из списка элемент со значением \"" + itemForDelete + "\"");
+        System.out.println("Попытаемся удалить из Списка №1 элемент со значением \"" + itemForDelete + "\"");
 
         if (!integersList1.contains(itemForDelete)) {
             System.out.println("Удаление невозможно, т.к. такой элемент в Списке №1 отсутствует");
@@ -101,6 +101,7 @@ public class ArrayListMain {
         }
 
         integersList2.add(15);
+        integersList2.add(7);
 
         System.out.println(integersList2);
         System.out.println();
@@ -134,24 +135,23 @@ public class ArrayListMain {
         System.out.println(integersList1);
         System.out.println();
 
-        System.out.println("Создадим Список №4:");
-        ArrayList<Integer> integersList4 = new ArrayList<>(10);
-        integersList4.add(3);
-        integersList4.add(4);
-        integersList4.add(5);
-        integersList4.add(4);
-        System.out.println(integersList4);
+        System.out.println("Список №1 " + (integersList1.equals(integersList3) ? "" : "не ") + "равен Списку №3");
         System.out.println();
 
-        System.out.println("Удалим из Списка №3 все элементы, кроме тех, которые есть в Списке №4");
-        integersList3.retainAll(integersList4);
+        System.out.println("Удалим из Списка №3 все элементы, кроме тех, которые есть в Списке №1");
+        integersList3.retainAll(integersList1);
         System.out.println("Список №3 принял вид:");
         System.out.println(integersList3);
         System.out.println();
 
-        System.out.println("Удалим из Списка №4 все элементы");
-        integersList4.clear();
-        System.out.println("Список №4 принял вид:");
-        System.out.println(integersList4);
+        System.out.println("Удалим из Списка №3 все элементы");
+        integersList3.clear();
+        System.out.println("Список №3 принял вид:");
+        System.out.println(integersList3);
+        System.out.println();
+
+        System.out.println("Хэш-код Списка №1: " + integersList1.hashCode());
+        System.out.println("Хэш-код Списка №2: " + integersList2.hashCode());
+        System.out.println("Хэш-код Списка №3: " + integersList3.hashCode());
     }
 }

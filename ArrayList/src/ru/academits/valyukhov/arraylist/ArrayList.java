@@ -45,6 +45,46 @@ public class ArrayList<E> implements List<E> {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != getClass()) {
+            return false;
+        }
+
+        @SuppressWarnings("unchecked")
+        ArrayList<E> list = (ArrayList<E>) o;
+
+        if (size != list.size) {
+            return false;
+        }
+
+        for (int i = 0; i < size; ++i) {
+            if (!items[i].equals(list.items[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 37;
+        int hashCode = 1;
+
+        hashCode = prime * hashCode + size;
+
+        for (int i = 0; i < size; ++i) {
+            hashCode = prime * hashCode + (items[i] != null ? items[i].hashCode() : 0);
+        }
+
+        return hashCode;
+    }
+
     public void ensureCapacity(int ensuredCapacity) {
         if (items.length < ensuredCapacity) {
             items = Arrays.copyOf(items, ensuredCapacity);
@@ -185,11 +225,11 @@ public class ArrayList<E> implements List<E> {
 
         size += c.size();
 
-        int currentIndex = index;
+        int i = index;
 
         for (E o : c) {
-            items[currentIndex] = o;
-            ++currentIndex;
+            items[i] = o;
+            ++i;
         }
 
         ++modCount;
@@ -223,7 +263,6 @@ public class ArrayList<E> implements List<E> {
 
         if (c.isEmpty()) {
             clear();
-
             return true;
         }
 
@@ -245,7 +284,7 @@ public class ArrayList<E> implements List<E> {
             return;
         }
 
-        Arrays.fill(items, null);
+        Arrays.fill(items, 0, size - 1, null);
 
         size = 0;
         ++modCount;
