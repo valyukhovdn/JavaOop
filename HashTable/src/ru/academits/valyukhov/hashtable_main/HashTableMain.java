@@ -21,16 +21,16 @@ public class HashTableMain {
         System.out.println("Количество элементов в Хэш-таблице №1: " + hashTable1.size());
         System.out.println();
 
-        Integer elementForDelete = 6;
-        System.out.println("Попытаемся удалить из Хэш-таблицы №1 элемент со значением \"" + elementForDelete + "\".");
+        Integer itemForRemove = 6;
+        System.out.println("Попытаемся удалить из Хэш-таблицы №1 элемент со значением \"" + itemForRemove + "\".");
 
-        if (!hashTable1.contains(elementForDelete)) {
+        if (!hashTable1.contains(itemForRemove)) {
             System.out.println("Удаление невозможно, т.к. такой элемент в Хэш-таблице №1 отсутствует.");
         } else {
             System.out.println("Такой элемент в Хэш-таблице №1 имеется.");
 
-            if (hashTable1.remove(elementForDelete)) {
-                System.out.println("Элемент со значением \"" + elementForDelete + "\" успешно удалён, а Хэш-таблица №1 приняла вид:");
+            if (hashTable1.remove(itemForRemove)) {
+                System.out.println("Элемент со значением \"" + itemForRemove + "\" успешно удалён, а Хэш-таблица №1 приняла вид:");
                 System.out.println(hashTable1);
                 System.out.println("Количество элементов в Хэш-таблице №1 теперь: " + hashTable1.size());
             }
@@ -39,21 +39,7 @@ public class HashTableMain {
         System.out.println();
         System.out.println("Создадим массив элементов аналогичный Хэш-таблице №1:");
         Object[] array = hashTable1.toArray();
-
-        for (Object hashCodsList : array) {
-            System.out.println(Arrays.toString((Object[]) hashCodsList));
-        }
-
-        System.out.println();
-        System.out.println("Распечатаем элементы Хэш-таблицы №1 через Iterator:");
-        System.out.print('[');
-
-        for (int e : hashTable1) {
-            System.out.print(e + ", ");
-        }
-
-        System.out.print("\b\b");
-        System.out.println(']');
+        System.out.println(Arrays.toString(array));
         System.out.println();
 
         System.out.println("Создадим массив целых чисел:");
@@ -139,5 +125,9 @@ public class HashTableMain {
         hashTable1.clear();
         System.out.println("Хэш-таблица №1 приняла вид:");
         System.out.println(hashTable1);
+
+        System.out.println();
+        System.out.println("Хэш-код Хэш-таблицы №1: " + hashTable1.hashCode());
+        System.out.println("Хэш-код Хэш-таблицы №2: " + hashTable2.hashCode());
     }
 }
