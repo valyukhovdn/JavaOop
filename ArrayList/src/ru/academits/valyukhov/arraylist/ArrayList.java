@@ -63,7 +63,7 @@ public class ArrayList<E> implements List<E> {
         }
 
         for (int i = 0; i < size; ++i) {
-            if (!items[i].equals(list.items[i])) {
+            if (!Objects.equals(items[i], list.items[i])) {
                 return false;
             }
         }
@@ -75,8 +75,6 @@ public class ArrayList<E> implements List<E> {
     public int hashCode() {
         final int prime = 37;
         int hashCode = 1;
-
-        hashCode = prime * hashCode + size;
 
         for (int i = 0; i < size; ++i) {
             hashCode = prime * hashCode + (items[i] != null ? items[i].hashCode() : 0);
@@ -284,7 +282,7 @@ public class ArrayList<E> implements List<E> {
             return;
         }
 
-        Arrays.fill(items, 0, size - 1, null);
+        Arrays.fill(items, 0, size, null);
 
         size = 0;
         ++modCount;
