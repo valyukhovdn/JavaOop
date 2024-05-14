@@ -3,7 +3,7 @@ package ru.academits.valyukhov.hashtable;
 import java.util.*;
 
 public class HashTable<E> implements Collection<E> {
-    private static final int DEFAULT_LISTS_QUANTITY = 5;
+    private static final int DEFAULT_LISTS_COUNT = 5;
 
     private final ArrayList<E>[] lists;
     private int size;
@@ -11,17 +11,17 @@ public class HashTable<E> implements Collection<E> {
 
     public HashTable() {
         //noinspection unchecked
-        lists = new ArrayList[DEFAULT_LISTS_QUANTITY];
+        lists = new ArrayList[DEFAULT_LISTS_COUNT];
     }
 
-    public HashTable(int listsQuantity) {
-        if (listsQuantity < 2) {
-            throw new IllegalArgumentException("В конструктор \"HashTable(int listsQuantity)\" передано значение "
-                    + "аргумента (" + listsQuantity + "). Минимально допустимое значение: 2.");
+    public HashTable(int listsCount) {
+        if (listsCount < 1) {
+            throw new IllegalArgumentException("В конструктор \"HashTable(int listsCount)\" передано значение "
+                    + "аргумента (" + listsCount + "). Минимально допустимое значение: 1.");
         }
 
         //noinspection unchecked
-        lists = new ArrayList[listsQuantity];
+        lists = new ArrayList[listsCount];
     }
 
     @Override
@@ -65,7 +65,7 @@ public class HashTable<E> implements Collection<E> {
     }
 
     public class HashTableIterator implements Iterator<E> {
-        private int visitedItemsCount = 0;
+        private int visitedItemsCount;
         private int currentListIndex;
         private int currentItemIndex = -1;
         private final int initialModCount = modCount;
@@ -140,13 +140,13 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean add(E item) {
-        int currentListIndex = getListIndex(item);
+        int listIndex = getListIndex(item);
 
-        if (lists[currentListIndex] == null) {
-            lists[currentListIndex] = new ArrayList<>();
+        if (lists[listIndex] == null) {
+            lists[listIndex] = new ArrayList<>();
         }
 
-        lists[currentListIndex].add(item);
+        lists[listIndex].add(item);
 
         ++size;
         ++modCount;
@@ -167,15 +167,15 @@ public class HashTable<E> implements Collection<E> {
         return false;
     }
 
-    private void checkCollectionForNull(Collection<?> collection) {
+    private static void isCollectionNull(Collection<?> collection) {
         if (collection == null) {
-            throw new IllegalArgumentException("Вместо коллекции в метод передан \"null\".");
+            throw new NullPointerException("Вместо коллекции в метод передан \"null\".");
         }
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        checkCollectionForNull(c);
+        isCollectionNull(c);
 
         for (Object o : c) {
             if (!contains(o)) {
@@ -188,7 +188,7 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        checkCollectionForNull(c);
+        isCollectionNull(c);
 
         if (c.isEmpty()) {
             return false;
@@ -203,7 +203,7 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        checkCollectionForNull(c);
+        isCollectionNull(c);
 
         if (size == 0 || c.isEmpty()) {
             return false;
@@ -231,7 +231,7 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        checkCollectionForNull(c);
+        isCollectionNull(c);
 
         if (size == 0) {
             return false;
