@@ -16,7 +16,7 @@ public class Csv {
         }
     }
 
-    private static boolean isConvertedCsvToHtml(BufferedReader reader, PrintWriter writer) throws IOException {
+    private static boolean convertCsvToHtml(BufferedReader reader, PrintWriter writer) throws IOException {
         writer.println("""
                  <!DOCTYPE html>
                  <html lang="ru">
@@ -62,82 +62,59 @@ public class Csv {
             return false;
         }
 
-        char currentChar;
-
-        boolean isLineFeedPossibleInDetail = false;
+        boolean hasSpecialSymbols = false;
 
         while (currentLine != null) {
-            if (!isLineFeedPossibleInDetail) {
+            if (!hasSpecialSymbols) {
                 writer.println("        <tr>");
                 writer.print("            <td>");
             }
 
-            for (int currentCharIndex = 0; currentCharIndex <= currentLine.length() - 1; ++currentCharIndex) {
-                currentChar = currentLine.charAt(currentCharIndex);
+            boolean isEscapingQuote = false;
+
+            for (int i = 0; i < currentLine.length(); ++i) {
+                char currentChar = currentLine.charAt(i);
 
                 switch (currentChar) {
                     case '"':
-                        if (currentCharIndex >= currentLine.length() - 1) {
+                        if (i >= currentLine.length() - 1) {
                             writer.println("</td>");
                             writer.println("        </tr>");
-                            isLineFeedPossibleInDetail = false;
+                            hasSpecialSymbols = false;
                             break;
                         }
 
-                        isLineFeedPossibleInDetail = true;
-
-                        ++currentCharIndex;
-                        currentChar = currentLine.charAt(currentCharIndex);
-
-                        switch (currentChar) {
-                            case '"':
-                                ++currentCharIndex;
-                                currentChar = currentLine.charAt(currentCharIndex);
-
-                                switch (currentChar) {
-                                    case '"':
-                                        writer.print("\"");
-
-                                        if (currentCharIndex >= currentLine.length() - 1) {
-                                            writer.print("</td>");
-                                            writer.println("        </tr>");
-                                        }
-
-                                        break;
-                                    case ',':
-                                        writer.print("\",");
-                                        break;
-                                    default:
-                                        writer.print('"');
-                                        printCharacter(writer, currentChar);
-                                }
-
+                        if (!hasSpecialSymbols) {
+                            hasSpecialSymbols = true;
+                            break;
+                        } else {
+                            if (!isEscapingQuote) {
+                                isEscapingQuote = true;
                                 break;
-                            case ',':
-                                writer.println("</td>");
-
-                                isLineFeedPossibleInDetail = false;
-
-                                if (currentCharIndex >= currentLine.length() - 1) {
-                                    writer.println("            <td></td>");
-                                    writer.println("        </tr>");
-                                } else {
-                                    writer.print("            <td>");
-                                }
-
-                                break;
-                            default:
-                                printCharacter(writer, currentChar);
+                            } else {
+                                writer.print("\"");
+                                isEscapingQuote = false;
+                            }
                         }
 
                         break;
                     case ',':
-                        writer.println("</td>");
+                        if (hasSpecialSymbols) {
+                            if (!isEscapingQuote) {
+                                writer.print(',');
+                                break;
+                            } else {
+                                isEscapingQuote = false;
+                                hasSpecialSymbols = false;
+                            }
+                        }
 
-                        if (currentCharIndex >= currentLine.length() - 1) {
+                        if (i >= currentLine.length() - 1) {
+                            writer.println("</td>");
                             writer.println("            <td></td>");
                             writer.println("        </tr>");
                         } else {
+                            writer.println("</td>");
                             writer.print("            <td>");
                         }
 
@@ -145,8 +122,8 @@ public class Csv {
                     default:
                         printCharacter(writer, currentChar);
 
-                        if (currentCharIndex >= currentLine.length() - 1) {
-                            if (isLineFeedPossibleInDetail) {
+                        if (i >= currentLine.length() - 1) {
+                            if (hasSpecialSymbols) {
                                 writer.println();
                                 writer.print("                <br />");
                             } else {
@@ -167,22 +144,22 @@ public class Csv {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            throw new IllegalArgumentException(String.format(System.lineSeparator() + "В программу должны быть переданы " +
-                    "\"2\" аргумента (пути к исходному CSV-файлу и итоговому HTML-файлу), а Вы передали \"%d\".", args.length));
-        }
+            System.out.printf("В программу должны быть переданы \"2\" аргумента (пути к исходному CSV-файлу и " +
+                    "итоговому HTML-файлу), а Вы передали \"%d\".%n", args.length);
+        } else {
+            String inputFilePath = args[0];     // Для тестов: "C:\\Users\\User\\IdeaProjects\\JavaOop\\Csv_input(2).csv";
+            String outputFilePath = args[1];    // Для тестов: "C:\\Users\\User\\IdeaProjects\\JavaOop\\Csv_output.html";
 
-        String inputFilePath = args[0];    // Для тестов: String inputFilePath = "C:\\Users\\User\\IdeaProjects\\JavaOop\\Csv_input.csv";
-        String outputFilePath = args[1];   // Для тестов: String outputFilePath = "C:\\Users\\User\\IdeaProjects\\JavaOop\\Csv_output.html";
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath, Charset.forName("windows-1251")));
-             PrintWriter writer = new PrintWriter(outputFilePath)) {
-            if (isConvertedCsvToHtml(reader, writer)) {
-                System.out.println("HTML-файл создан.");
-            } else {
-                System.out.println("Исходный файл пуст. Сформирована пустая таблица.");
+            try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath, Charset.forName("windows-1251")));
+                 PrintWriter writer = new PrintWriter(outputFilePath)) {
+                if (convertCsvToHtml(reader, writer)) {
+                    System.out.println("HTML-файл создан.");
+                } else {
+                    System.out.println("Исходный файл пуст. Сформирована пустая таблица.");
+                }
+            } catch (IOException e) {
+                System.out.println("Произошла ошибка: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Произошла ошибка: " + e.getMessage());
         }
     }
 }
