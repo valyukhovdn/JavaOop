@@ -1,31 +1,7 @@
-package ru.academits.valyukhov;
+package ru.academits.valyukhov.lambdas;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-class Person {
-    private final String name;
-    private int age;
-
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("name: %7s, age: %-5d", name, age);
-    }
-}
 
 public class Lambdas {
     public static void main(String[] args) {
@@ -50,88 +26,64 @@ public class Lambdas {
         persons.forEach(System.out::println);
 
         // А) получить список уникальных имен
-        System.out.println();
-        System.out.println("Список уникальных имен:");
-
-        persons
-                .stream()
+        List<String> uniqueNamesList = persons.stream()
                 .map(Person::getName)
                 .distinct()
                 .sorted()
-                .forEach(System.out::println);
+                .toList();
 
         // Б) вывести список уникальных имен в формате:
         //    Имена: Иван, Сергей, Петр.
         System.out.println();
         System.out.println("Список уникальных имен в заданном формате:");
-
-        Optional<String> namesInFormat = persons
-                .stream()
-                .map(Person::getName)
-                .distinct()
-                .sorted()
-                .reduce((name1, name2) -> name1 + ", " + name2);
-
-        System.out.print("Имена: ");
-        namesInFormat.ifPresent(System.out::println);
+        String uniqueNames = uniqueNamesList.stream().collect(Collectors.joining(", ", "Имена: ", ""));
+        System.out.println(uniqueNames);
 
         // В) получить список людей младше 18, посчитать для них средний возраст
         System.out.println();
         System.out.println("Список людей младше 18 лет:");
 
-        boolean hasPeopleUnder18 = persons
-                .stream()
-                .anyMatch(person -> person.getAge() < 18);
+        List<Person> peopleUnder18 = persons.stream()
+                .filter(person -> person.getAge() < 18)
+                .toList();
 
-        if (hasPeopleUnder18) {
-            persons
-                    .stream()
-                    .filter(person -> person.getAge() < 18)
-                    .forEach(System.out::println);
-        } else {
+        if (peopleUnder18.isEmpty()) {
             System.out.println("В списке нет людей младше 18 лет.");
+        } else {
+            peopleUnder18.forEach(System.out::println);
         }
 
         System.out.println();
         System.out.print("Средний возраст людей младше 18 лет: ");
 
-        OptionalDouble optionalAverageAge = persons
-                .stream()
+        OptionalDouble peopleUnder18AverageAge = persons.stream()
                 .mapToDouble(Person::getAge)
                 .filter(age -> age < 18)
                 .average();
 
-        if (optionalAverageAge.isPresent()) {
-            System.out.printf("%3.2f\n", optionalAverageAge.getAsDouble());
-        } else {
+        if (peopleUnder18AverageAge.isEmpty()) {
             System.out.println("в списке нет людей младше 18 лет.");
+        } else {
+            System.out.printf("%3.2f", peopleUnder18AverageAge.getAsDouble());
+            System.out.println();
         }
 
         // Г) при помощи группировки получить Map, в котором ключи имена, а значения средний возраст
-        Map<String, List<Person>> personsByNames = persons
-                .stream()
-                .collect(Collectors.groupingBy(Person::getName));
-
-        Map<String, Double> averageAgesByNames = new HashMap<>();
-
-        personsByNames.forEach((name, personsList) -> averageAgesByNames.put(name, personsList.stream()
-                .mapToInt(Person::getAge).average().getAsDouble()));
+        Map<String, Double> averageAgesByNames = persons.stream()
+                .collect(Collectors.groupingBy(Person::getName, Collectors.averagingInt(Person::getAge)));
 
         System.out.println();
-        System.out.println("Средний возраст по именам: ");
-        averageAgesByNames.forEach((name, averageAge) -> System.out.printf("%-10s: %3.2f\n", name, averageAge));
+        System.out.println("Средний возраст по именам:");
+        averageAgesByNames.forEach((name, averageAge) -> System.out.printf("%-10s: %3.2f" + System.lineSeparator(), name, averageAge));
 
         // Д) получить людей, возраст которых от 20 до 45,
         //    вывести в консоль их имена в порядке убывания возраста
         System.out.println();
         System.out.println("Список имён людей в возрасте от 20 до 45 в порядке убывания возраста:");
 
-        Predicate<Person> upperAgeLimit = person -> person.getAge() <= 45;
-        Predicate<Person> ageRange = upperAgeLimit.and(person -> person.getAge() >= 20);
-
         persons.stream()
-                .filter(ageRange)
+                .filter(person -> person.getAge() >= 20 && person.getAge() <= 45)
                 .sorted((person1, person2) -> person2.getAge() - person1.getAge())
-                .forEach(person -> System.out.printf("%-10s (%2d)\n", person.getName(), person.getAge()));
+                .forEach(person -> System.out.printf("%-10s (%2d)" + System.lineSeparator(), person.getName(), person.getAge()));
     }
 }
