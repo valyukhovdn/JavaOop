@@ -36,7 +36,7 @@ public class Lambdas {
         //    Имена: Иван, Сергей, Петр.
         System.out.println();
         System.out.println("Список уникальных имен в заданном формате:");
-        String uniqueNames = uniqueNamesList.stream().collect(Collectors.joining(", ", "Имена: ", ""));
+        String uniqueNames = uniqueNamesList.stream().collect(Collectors.joining(", ", "Имена: ", "."));
         System.out.println(uniqueNames);
 
         // В) получить список людей младше 18, посчитать для них средний возраст
@@ -57,7 +57,7 @@ public class Lambdas {
         System.out.print("Средний возраст людей младше 18 лет: ");
 
         OptionalDouble peopleUnder18AverageAge = persons.stream()
-                .mapToDouble(Person::getAge)
+                .mapToInt(Person::getAge)
                 .filter(age -> age < 18)
                 .average();
 
@@ -74,7 +74,11 @@ public class Lambdas {
 
         System.out.println();
         System.out.println("Средний возраст по именам:");
-        averageAgesByNames.forEach((name, averageAge) -> System.out.printf("%-10s: %3.2f" + System.lineSeparator(), name, averageAge));
+
+        averageAgesByNames.forEach((name, averageAge) -> {
+            System.out.printf("%-10s: %3.2f", name, averageAge);
+            System.out.println();
+        });
 
         // Д) получить людей, возраст которых от 20 до 45,
         //    вывести в консоль их имена в порядке убывания возраста
@@ -84,6 +88,9 @@ public class Lambdas {
         persons.stream()
                 .filter(person -> person.getAge() >= 20 && person.getAge() <= 45)
                 .sorted((person1, person2) -> person2.getAge() - person1.getAge())
-                .forEach(person -> System.out.printf("%-10s (%2d)" + System.lineSeparator(), person.getName(), person.getAge()));
+                .forEach(person -> {
+                    System.out.printf("%-10s (%2d)", person.getName(), person.getAge());
+                    System.out.println();
+                });
     }
 }

@@ -1,4 +1,4 @@
-package ru.academits.valyukhov.lambdasTask2;
+package ru.academits.valyukhov.lambdas_task2;
 
 import java.util.*;
 import java.util.stream.DoubleStream;
@@ -11,15 +11,15 @@ public class LambdasTask2 {
 
         // Задача 2.1. Поток корней чисел.
         System.out.print("Введите необходимое количество элементов из потока корней целых чисел: ");
-        int elementsQuantity = scanner.nextInt();
+        int streamElementsQuantity = scanner.nextInt();
 
-        if (elementsQuantity < 0) {
-            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".", elementsQuantity);
+        if (streamElementsQuantity < 0) {
+            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".", streamElementsQuantity);
             System.out.println();
             return;
         }
 
-        DoubleStream squareRootsStream = IntStream.iterate(0, x -> x + 1).mapToDouble(Math::sqrt).limit(elementsQuantity);
+        DoubleStream squareRootsStream = IntStream.iterate(0, x -> x + 1).mapToDouble(Math::sqrt).limit(streamElementsQuantity);
         squareRootsStream.forEach(x -> System.out.printf("%7f" + System.lineSeparator(), x));
 
         System.out.println();
@@ -34,15 +34,13 @@ public class LambdasTask2 {
             return;
         }
 
-        if (fibonacciNumbersQuantity == 0) {
-            return;
-        }
-
-        Stream<Integer> fibonacciNumbers = Stream.concat(Stream.of(0), Stream
-                .iterate(new NumbersPair(0, 1), NumbersPair::new)
-                .map(NumbersPair::getValue2));
+        IntStream fibonacciNumbers = Stream.iterate(new int[]{0, 1}, array -> new int[]{array[1], array[0] + array[1]})
+                .mapToInt(array -> array[0]);
 
         fibonacciNumbers.limit(fibonacciNumbersQuantity)
-                .forEach(number -> System.out.printf("%12d" + System.lineSeparator(), number));
+                .forEach(number -> {
+                    System.out.printf("%12d", number);
+                    System.out.println();
+                });
     }
 }
