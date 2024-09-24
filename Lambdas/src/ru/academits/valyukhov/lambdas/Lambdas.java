@@ -64,8 +64,7 @@ public class Lambdas {
         if (peopleUnder18AverageAge.isEmpty()) {
             System.out.println("в списке нет людей младше 18 лет.");
         } else {
-            System.out.printf("%3.2f", peopleUnder18AverageAge.getAsDouble());
-            System.out.println();
+            System.out.printf("%3.2f%n", peopleUnder18AverageAge.getAsDouble());
         }
 
         // Г) при помощи группировки получить Map, в котором ключи имена, а значения средний возраст
@@ -75,10 +74,7 @@ public class Lambdas {
         System.out.println();
         System.out.println("Средний возраст по именам:");
 
-        averageAgesByNames.forEach((name, averageAge) -> {
-            System.out.printf("%-10s: %3.2f", name, averageAge);
-            System.out.println();
-        });
+        averageAgesByNames.forEach((name, averageAge) -> System.out.printf("%-10s: %3.2f%n", name, averageAge));
 
         // Д) получить людей, возраст которых от 20 до 45,
         //    вывести в консоль их имена в порядке убывания возраста
@@ -88,9 +84,6 @@ public class Lambdas {
         persons.stream()
                 .filter(person -> person.getAge() >= 20 && person.getAge() <= 45)
                 .sorted((person1, person2) -> person2.getAge() - person1.getAge())
-                .forEach(person -> {
-                    System.out.printf("%-10s (%2d)", person.getName(), person.getAge());
-                    System.out.println();
-                });
+                .forEach(person -> System.out.printf("%-10s (%2d)%n", person.getName(), person.getAge()));
     }
 }

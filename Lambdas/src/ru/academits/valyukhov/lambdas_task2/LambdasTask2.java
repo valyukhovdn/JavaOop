@@ -14,13 +14,12 @@ public class LambdasTask2 {
         int streamElementsQuantity = scanner.nextInt();
 
         if (streamElementsQuantity < 0) {
-            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".", streamElementsQuantity);
-            System.out.println();
+            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".%n", streamElementsQuantity);
             return;
         }
 
         DoubleStream squareRootsStream = IntStream.iterate(0, x -> x + 1).mapToDouble(Math::sqrt).limit(streamElementsQuantity);
-        squareRootsStream.forEach(x -> System.out.printf("%7f" + System.lineSeparator(), x));
+        squareRootsStream.forEach(x -> System.out.printf("%7f%n", x));
 
         System.out.println();
 
@@ -29,8 +28,7 @@ public class LambdasTask2 {
         int fibonacciNumbersQuantity = scanner.nextInt();
 
         if (fibonacciNumbersQuantity < 0) {
-            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".", fibonacciNumbersQuantity);
-            System.out.println();
+            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".%n", fibonacciNumbersQuantity);
             return;
         }
 
@@ -38,9 +36,6 @@ public class LambdasTask2 {
                 .mapToInt(array -> array[0]);
 
         fibonacciNumbers.limit(fibonacciNumbersQuantity)
-                .forEach(number -> {
-                    System.out.printf("%12d", number);
-                    System.out.println();
-                });
+                .forEach(number -> System.out.printf("%12d%n", number));
     }
 }
