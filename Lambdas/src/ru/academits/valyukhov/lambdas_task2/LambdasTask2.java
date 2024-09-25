@@ -11,14 +11,14 @@ public class LambdasTask2 {
 
         // Задача 2.1. Поток корней чисел.
         System.out.print("Введите необходимое количество элементов из потока корней целых чисел: ");
-        int streamElementsQuantity = scanner.nextInt();
+        int squareRootsQuantity = scanner.nextInt();
 
-        if (streamElementsQuantity < 0) {
-            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".%n", streamElementsQuantity);
+        if (squareRootsQuantity < 0) {
+            System.out.printf("Ошибка! Надо было ввести не отрицательное число, а вы ввели \"%d\".%n", squareRootsQuantity);
             return;
         }
 
-        DoubleStream squareRootsStream = IntStream.iterate(0, x -> x + 1).mapToDouble(Math::sqrt).limit(streamElementsQuantity);
+        DoubleStream squareRootsStream = IntStream.iterate(0, x -> x + 1).mapToDouble(Math::sqrt).limit(squareRootsQuantity);
         squareRootsStream.forEach(x -> System.out.printf("%7f%n", x));
 
         System.out.println();
@@ -32,10 +32,10 @@ public class LambdasTask2 {
             return;
         }
 
-        IntStream fibonacciNumbers = Stream.iterate(new int[]{0, 1}, array -> new int[]{array[1], array[0] + array[1]})
+        IntStream fibonacciNumbersStream = Stream.iterate(new int[]{0, 1}, array -> new int[]{array[1], array[0] + array[1]})
                 .mapToInt(array -> array[0]);
 
-        fibonacciNumbers.limit(fibonacciNumbersQuantity)
+        fibonacciNumbersStream.limit(fibonacciNumbersQuantity)
                 .forEach(number -> System.out.printf("%12d%n", number));
     }
 }
