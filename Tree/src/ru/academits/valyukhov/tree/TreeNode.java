@@ -1,18 +1,12 @@
 package ru.academits.valyukhov.tree;
 
-public class TreeNode<E> {
+class TreeNode<E> {
     private E value;
     private TreeNode<E> left;
     private TreeNode<E> right;
 
     public TreeNode(E value) {
         this.value = value;
-    }
-
-    public TreeNode(E value, TreeNode<E> left, TreeNode<E> right) {
-        this.value = value;
-        this.left = left;
-        this.right = right;
     }
 
     public E getValue() {
@@ -31,8 +25,8 @@ public class TreeNode<E> {
         return left;
     }
 
-    public void setLeft(TreeNode<E> treeNode) {
-        this.left = treeNode;
+    public void setLeft(TreeNode<E> left) {
+        this.left = left;
     }
 
     public boolean hasRight() {
@@ -43,7 +37,7 @@ public class TreeNode<E> {
         return right;
     }
 
-    public void setRight(TreeNode<E> treeNode) {
-        this.right = treeNode;
+    public void setRight(TreeNode<E> right) {
+        this.right = right;
     }
 }
