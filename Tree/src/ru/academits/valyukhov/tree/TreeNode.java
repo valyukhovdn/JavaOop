@@ -1,6 +1,6 @@
 package ru.academits.valyukhov.tree;
 
-class TreeNode<E> {
+public class TreeNode<E> {
     private E value;
     private TreeNode<E> left;
     private TreeNode<E> right;

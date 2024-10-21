@@ -4,17 +4,14 @@ import ru.academits.valyukhov.tree.BinarySearchTree;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 public class TreeMain {
     public static void main(String[] args) {
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
 
-        Integer[] nodeValuesArray = {17, 5, 20, 3, 7, 19, 28, 1, 4, 12, 9, 6, 10};
+        Integer[] nodeValuesArray = {17, 5, 20, 3, 7, 19, 28, 1, 4, 12, 9, 6, 10, 15, 13, null, null};
 
-        IntStream intStream = Arrays.stream(nodeValuesArray).mapToInt(Integer::valueOf);
-
-        intStream.forEach(tree::addNodeWithValue);    // Вставка новых узлов по значениям
+        Arrays.stream(nodeValuesArray).forEach(tree::add);    // Вставка новых узлов по значениям
 
         System.out.println();
         System.out.println("Дерево \"tree\":");
@@ -25,30 +22,30 @@ public class TreeMain {
         System.out.println("Количество узлов в дереве \"tree\": " + tree.getSize());
 
         // Поиск узла по значению
-        Integer searchedValue = 1;
+        Integer searchedValue = null;
 
         System.out.println();
         System.out.printf("Осуществим поиск узла со значением \"%d\" в дереве \"tree\".%n", searchedValue);
         System.out.print("Результат: ");
 
-        if (tree.isNodeWithValue(searchedValue)) {
+        if (tree.containsNodeWithValue(searchedValue)) {
             System.out.println("узел со значением \"" + searchedValue + "\" в дереве \"tree\" имеется.");
         } else {
             System.out.println("узла со значением \"" + searchedValue + "\" в дереве \"tree\" нет.");
         }
 
         // Удаление первого вхождения узла по значению
-        Integer deletedNodeValue = 7;
+        Integer removedNodeValue = 7;
 
         System.out.println();
         System.out.println("Попытаемся удалить из дерева \"tree\" первое вхождение узла со значением \""
-                + deletedNodeValue + "\"");
+                + removedNodeValue + "\"");
         System.out.print("Результат: ");
 
-        if (!tree.deleteNode(deletedNodeValue)) {
-            System.out.println("узел со значением \"" + deletedNodeValue + "\" не удалён, т.к. в этом дереве такого узла нет.");
+        if (!tree.remove(removedNodeValue)) {
+            System.out.println("узел со значением \"" + removedNodeValue + "\" не удалён, т.к. в этом дереве такого узла нет.");
         } else {
-            System.out.println("узел со значением \"" + deletedNodeValue + "\" удалён.");
+            System.out.println("узел со значением \"" + removedNodeValue + "\" удалён.");
             System.out.println("Дерево \"tree\" приняло вид:");
             System.out.println(tree);
         }
@@ -63,7 +60,7 @@ public class TreeMain {
 
         Consumer<Integer> printConsumer = value -> System.out.print(value + ", ");
 
-        tree.recursiveDepthFirstTraversal(printConsumer);
+        tree.depthFirstTraversalWithRecursion(tree.getRootNode(), printConsumer);
 
         System.out.println("\b\b");
 
