@@ -14,16 +14,8 @@ public class BinarySearchTree<E> {
     }
 
     public BinarySearchTree(Comparator<E> comparator) {
-        if (comparator == null) {
-            //noinspection unchecked
-            comparator = (Comparator<E>) Comparator.naturalOrder();
-        }
-
-        this.comparator = comparator;
-    }
-
-    public TreeNode<E> getRootNode() {
-        return rootNode;
+        //noinspection unchecked
+        this.comparator = comparator != null ? comparator : (Comparator<E>) Comparator.nullsFirst(Comparator.naturalOrder());
     }
 
     // Получение числа элементов
@@ -213,28 +205,15 @@ public class BinarySearchTree<E> {
 
             nodeForReplace.setLeft(deletedNode.getLeft());
 
-            if (nodeForReplaceParent == deletedNode) {
-                replaceNode(isDeletedNodeLeftChild, deletedNodeParent, nodeForReplace);
-            } else {
-                if (nodeForReplace.hasRight()) {
-                    nodeForReplaceParent.setLeft(nodeForReplace.getRight());
-                } else {
-                    nodeForReplaceParent.setLeft(null);
-                }
+            if (nodeForReplaceParent != deletedNode) {
+                nodeForReplaceParent.setLeft(nodeForReplace.hasRight() ? nodeForReplace.getRight() : null);
 
                 nodeForReplace.setRight(deletedNode.getRight());
-                replaceNode(isDeletedNodeLeftChild, deletedNodeParent, nodeForReplace);
             }
+
+            replaceNode(isDeletedNodeLeftChild, deletedNodeParent, nodeForReplace);
         } else {
-            TreeNode<E> deletedNodeChild;
-
-            if (deletedNode.hasLeft()) {                    // Если у удаляемого узла есть только левый сын
-                deletedNodeChild = deletedNode.getLeft();
-            } else {
-                deletedNodeChild = deletedNode.getRight();  // Если у удаляемого узла есть только правый сын, или детей нет
-            }
-
-            replaceNode(isDeletedNodeLeftChild, deletedNodeParent, deletedNodeChild);
+            replaceNode(isDeletedNodeLeftChild, deletedNodeParent, deletedNode.hasLeft() ? deletedNode.getLeft() : deletedNode.getRight());
         }
 
         --size;
@@ -242,22 +221,28 @@ public class BinarySearchTree<E> {
         return true;
     }
 
-    // Обход в глубину с рекурсией
-    public void depthFirstTraversalWithRecursion(TreeNode<E> initialNode, Consumer<E> consumer) {
-        if (initialNode == null) {
+    // Обход дерева в ширину
+    public void breadthFirstTraversal(Consumer<E> consumer) {
+        if (rootNode == null) {
             return;
         }
 
-        consumer.accept(initialNode.getValue());
+        Queue<TreeNode<E>> queue = new LinkedList<>();
 
-        if (initialNode.hasLeft()) {
-            TreeNode<E> currentLeftNode = initialNode.getLeft();
-            this.depthFirstTraversalWithRecursion(currentLeftNode, consumer);
-        }
+        queue.offer(rootNode);
 
-        if (initialNode.hasRight()) {
-            TreeNode<E> currentRightNode = initialNode.getRight();
-            this.depthFirstTraversalWithRecursion(currentRightNode, consumer);
+        while (!queue.isEmpty()) {
+            TreeNode<E> currentNode = queue.poll();
+
+            consumer.accept(currentNode.getValue());
+
+            if (currentNode.hasLeft()) {
+                queue.offer(currentNode.getLeft());
+            }
+
+            if (currentNode.hasRight()) {
+                queue.offer(currentNode.getRight());
+            }
         }
     }
 
@@ -285,28 +270,25 @@ public class BinarySearchTree<E> {
         }
     }
 
-    // Обход дерева в ширину
-    public void breadthFirstTraversal(Consumer<E> consumer) {
-        if (rootNode == null) {
+    // Вспомогательный метод обхода в глубину с рекурсией (чтобы public-метод не принимал "node", а начинал обход сразу с корня).
+    private void auxiliaryDepthFirstTraversalWithRecursion(TreeNode<E> node, Consumer<E> consumer) {
+        if (node == null) {
             return;
         }
 
-        Queue<TreeNode<E>> queue = new LinkedList<>();
+        consumer.accept(node.getValue());
 
-        queue.offer(rootNode);
-
-        while (!queue.isEmpty()) {
-            TreeNode<E> currentNode = queue.poll();
-
-            consumer.accept(currentNode.getValue());
-
-            if (currentNode.hasLeft()) {
-                queue.offer(currentNode.getLeft());
-            }
-
-            if (currentNode.hasRight()) {
-                queue.offer(currentNode.getRight());
-            }
+        if (node.hasLeft()) {
+            auxiliaryDepthFirstTraversalWithRecursion(node.getLeft(), consumer);
         }
+
+        if (node.hasRight()) {
+            auxiliaryDepthFirstTraversalWithRecursion(node.getRight(), consumer);
+        }
+    }
+
+    // Обход в глубину с рекурсией
+    public void depthFirstTraversalWithRecursion(Consumer<E> consumer) {
+        auxiliaryDepthFirstTraversalWithRecursion(rootNode, consumer);
     }
 }

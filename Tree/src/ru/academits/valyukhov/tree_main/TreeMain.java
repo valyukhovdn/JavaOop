@@ -22,7 +22,7 @@ public class TreeMain {
         System.out.println("Количество узлов в дереве \"tree\": " + tree.getSize());
 
         // Поиск узла по значению
-        Integer searchedValue = null;
+        Integer searchedValue = 1;
 
         System.out.println();
         System.out.printf("Осуществим поиск узла со значением \"%d\" в дереве \"tree\".%n", searchedValue);
@@ -35,7 +35,7 @@ public class TreeMain {
         }
 
         // Удаление первого вхождения узла по значению
-        Integer removedNodeValue = 7;
+        Integer removedNodeValue = 5;
 
         System.out.println();
         System.out.println("Попытаемся удалить из дерева \"tree\" первое вхождение узла со значением \""
@@ -54,13 +54,13 @@ public class TreeMain {
         System.out.println();
         System.out.println("Количество узлов в дереве \"tree\": " + tree.getSize());
 
-        // Обход дерева в глубину с рекурсией
-        System.out.println();
-        System.out.println("Значения узлов в порядке обхода дерева \"tree\" в глубину с рекурсией:");
-
         Consumer<Integer> printConsumer = value -> System.out.print(value + ", ");
 
-        tree.depthFirstTraversalWithRecursion(tree.getRootNode(), printConsumer);
+        // Обход дерева в ширину
+        System.out.println();
+        System.out.println("Значения узлов в порядке обхода дерева \"tree\" в ширину:");
+
+        tree.breadthFirstTraversal(printConsumer);
 
         System.out.println("\b\b");
 
@@ -72,11 +72,11 @@ public class TreeMain {
 
         System.out.println("\b\b");
 
-        // Обход дерева в ширину
+        // Обход дерева в глубину с рекурсией
         System.out.println();
-        System.out.println("Значения узлов в порядке обхода дерева \"tree\" в ширину:");
+        System.out.println("Значения узлов в порядке обхода дерева \"tree\" в глубину с рекурсией:");
 
-        tree.breadthFirstTraversal(printConsumer);
+        tree.depthFirstTraversalWithRecursion(printConsumer);
 
         System.out.println("\b\b");
     }

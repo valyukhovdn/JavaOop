@@ -1,43 +1,43 @@
 package ru.academits.valyukhov.tree;
 
-public class TreeNode<E> {
+class TreeNode<E> {
     private E value;
     private TreeNode<E> left;
     private TreeNode<E> right;
 
-    public TreeNode(E value) {
+    TreeNode(E value) {
         this.value = value;
     }
 
-    public E getValue() {
+    E getValue() {
         return value;
     }
 
-    public void setValue(E value) {
+    void setValue(E value) {
         this.value = value;
     }
 
-    public boolean hasLeft() {
+    boolean hasLeft() {
         return left != null;
     }
 
-    public TreeNode<E> getLeft() {
+    TreeNode<E> getLeft() {
         return left;
     }
 
-    public void setLeft(TreeNode<E> left) {
+    void setLeft(TreeNode<E> left) {
         this.left = left;
     }
 
-    public boolean hasRight() {
+    boolean hasRight() {
         return right != null;
     }
 
-    public TreeNode<E> getRight() {
+    TreeNode<E> getRight() {
         return right;
     }
 
-    public void setRight(TreeNode<E> right) {
+    void setRight(TreeNode<E> right) {
         this.right = right;
     }
 }
