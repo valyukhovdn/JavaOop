@@ -35,7 +35,7 @@ public class TreeMain {
         }
 
         // Удаление первого вхождения узла по значению
-        Integer removedNodeValue = 5;
+        Integer removedNodeValue = 12;
 
         System.out.println();
         System.out.println("Попытаемся удалить из дерева \"tree\" первое вхождение узла со значением \""

@@ -193,8 +193,9 @@ public class BinarySearchTree<E> {
             }
         }
 
-        // Если у удаляемого узла два ребёнка
-        if (deletedNode.hasLeft() && deletedNode.hasRight()) {
+        if (!(deletedNode.hasLeft() && deletedNode.hasRight())) {
+            replaceNode(isDeletedNodeLeftChild, deletedNodeParent, deletedNode.hasLeft() ? deletedNode.getLeft() : deletedNode.getRight());
+        } else { // Если у удаляемого узла два ребёнка
             TreeNode<E> nodeForReplaceParent = deletedNode;
             TreeNode<E> nodeForReplace = deletedNode.getRight();
 
@@ -206,14 +207,12 @@ public class BinarySearchTree<E> {
             nodeForReplace.setLeft(deletedNode.getLeft());
 
             if (nodeForReplaceParent != deletedNode) {
-                nodeForReplaceParent.setLeft(nodeForReplace.hasRight() ? nodeForReplace.getRight() : null);
+                nodeForReplaceParent.setLeft(nodeForReplace.getRight());
 
                 nodeForReplace.setRight(deletedNode.getRight());
             }
 
             replaceNode(isDeletedNodeLeftChild, deletedNodeParent, nodeForReplace);
-        } else {
-            replaceNode(isDeletedNodeLeftChild, deletedNodeParent, deletedNode.hasLeft() ? deletedNode.getLeft() : deletedNode.getRight());
         }
 
         --size;
@@ -271,7 +270,7 @@ public class BinarySearchTree<E> {
     }
 
     // Вспомогательный метод обхода в глубину с рекурсией (чтобы public-метод не принимал "node", а начинал обход сразу с корня).
-    private void auxiliaryDepthFirstTraversalWithRecursion(TreeNode<E> node, Consumer<E> consumer) {
+    private void depthFirstTraversalWithRecursion(TreeNode<E> node, Consumer<E> consumer) {
         if (node == null) {
             return;
         }
@@ -279,16 +278,16 @@ public class BinarySearchTree<E> {
         consumer.accept(node.getValue());
 
         if (node.hasLeft()) {
-            auxiliaryDepthFirstTraversalWithRecursion(node.getLeft(), consumer);
+            depthFirstTraversalWithRecursion(node.getLeft(), consumer);
         }
 
         if (node.hasRight()) {
-            auxiliaryDepthFirstTraversalWithRecursion(node.getRight(), consumer);
+            depthFirstTraversalWithRecursion(node.getRight(), consumer);
         }
     }
 
     // Обход в глубину с рекурсией
     public void depthFirstTraversalWithRecursion(Consumer<E> consumer) {
-        auxiliaryDepthFirstTraversalWithRecursion(rootNode, consumer);
+        depthFirstTraversalWithRecursion(rootNode, consumer);
     }
 }
