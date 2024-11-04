@@ -158,7 +158,7 @@ public class BinarySearchTree<E> {
     }
 
     // Удаление первого вхождения узла по значению
-    public boolean remove(E removedNodeValue) {
+    public boolean remove(E removedValue) {
         if (rootNode == null) {
             return false;
         }
@@ -168,7 +168,7 @@ public class BinarySearchTree<E> {
         boolean isDeletedNodeLeftChild = false;
 
         while (true) {
-            int comparisonResult = comparator.compare(removedNodeValue, deletedNode.getValue());
+            int comparisonResult = comparator.compare(removedValue, deletedNode.getValue());
 
             if (comparisonResult == 0) {
                 break;
@@ -193,7 +193,7 @@ public class BinarySearchTree<E> {
             }
         }
 
-        if (!(deletedNode.hasLeft() && deletedNode.hasRight())) {
+        if (!deletedNode.hasLeft() || !deletedNode.hasRight()) {
             replaceNode(isDeletedNodeLeftChild, deletedNodeParent, deletedNode.hasLeft() ? deletedNode.getLeft() : deletedNode.getRight());
         } else { // Если у удаляемого узла два ребёнка
             TreeNode<E> nodeForReplaceParent = deletedNode;
