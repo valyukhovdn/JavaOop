@@ -26,7 +26,7 @@ public class GraphMain {
                 "G"   // Index 13
         ));
 
-        int[][] edgesCoordinates = new int[][]{
+        int[][] edgesCoordinates = {
                 {0, 1},
                 {1, 2},
                 {1, 3},
@@ -51,26 +51,36 @@ public class GraphMain {
         System.out.println();
 
         int initialVertexIndex = 1;
-        Consumer<String> printConsumer = value -> System.out.printf("%3s, ", value);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        Consumer<String> stringBuilderConsumer = value -> stringBuilder.append(String.format("%3s, ", value));
 
         // Обход графа в ширину, начиная с заданной вершины
         System.out.println("Обход графа в ширину, начиная с вершины с индексом \"" + initialVertexIndex
-                + "\" и значением \"" + graph.getVertexValue(initialVertexIndex) + "\":");
-        graph.breadthFirstTraversal(initialVertexIndex, printConsumer);
-        System.out.println("\b\b");
+                + "\" и значением \"" + graph.getVertex(initialVertexIndex) + "\":");
+        graph.breadthFirstTraversal(initialVertexIndex, stringBuilderConsumer);
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        System.out.println(stringBuilder);
+        stringBuilder.delete(0, stringBuilder.length());
         System.out.println();
 
         // Обход графа в глубину без рекурсии, начиная с заданной вершины
         System.out.println("Обход графа в глубину без рекурсии, начиная с вершины с индексом \"" + initialVertexIndex
-                + "\" и значением \"" + graph.getVertexValue(initialVertexIndex) + "\":");
-        graph.depthFirstTraversal(initialVertexIndex, printConsumer);
-        System.out.println("\b\b");
+                + "\" и значением \"" + graph.getVertex(initialVertexIndex) + "\":");
+        graph.depthFirstTraversal(initialVertexIndex, stringBuilderConsumer);
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        System.out.println(stringBuilder);
+        stringBuilder.delete(0, stringBuilder.length());
         System.out.println();
 
         // Обход графа в глубину с рекурсией, начиная с заданной вершины
         System.out.println("Обход графа в глубину с рекурсией, начиная с вершины с индексом \"" + initialVertexIndex
-                + "\" и значением \"" + graph.getVertexValue(initialVertexIndex) + "\":");
-        graph.depthFirstTraversalWithRecursion(initialVertexIndex, printConsumer);
-        System.out.println("\b\b");
+                + "\" и значением \"" + graph.getVertex(initialVertexIndex) + "\":");
+        graph.depthFirstTraversalWithRecursion(initialVertexIndex, stringBuilderConsumer);
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        System.out.println(stringBuilder);
     }
 }
