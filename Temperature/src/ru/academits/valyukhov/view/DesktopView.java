@@ -36,7 +36,7 @@ public class DesktopView implements View {
 
             JFrame frame = new JFrame("Конвертер температур");
             frame.setSize(500, 500);
-            // frame.setResizable(false);
+            frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
@@ -90,21 +90,18 @@ public class DesktopView implements View {
             frame.pack();
             frame.setVisible(true);
 
-            // Отключение невыбранных полей ввода температуры
+            // Сокрытие невыбранных полей ввода температуры
             celsiusTemperatureField.addCaretListener(s -> {
-                // celsiusTemperatureField.setEnabled(true);
                 kelvinTemperatureField.setVisible(false);
                 fahrenheitTemperatureField.setVisible(false);
             });
 
             kelvinTemperatureField.addCaretListener(s -> {
-                // celsiusTemperatureField.setEnabled(false);
                 celsiusTemperatureField.setVisible(false);
                 fahrenheitTemperatureField.setVisible(false);
             });
 
             fahrenheitTemperatureField.addCaretListener(s -> {
-                // celsiusTemperatureField.setEnabled(false);
                 celsiusTemperatureField.setVisible(false);
                 kelvinTemperatureField.setVisible(false);
             });
@@ -190,9 +187,11 @@ public class DesktopView implements View {
     }
 
     private void returnToInitialState(JLabel tooltipLabel, JFrame frame) {
-        celsiusTemperatureTextLabel.setVisible(false);       // Эти строки написаны для устранения артефактов,
-        kelvinTemperatureTextLabel.setVisible(false);        // т.к. введённая для конвертации температура после конвертации
-        fahrenheitTemperatureTextLabel.setVisible(false);    // и последующего сброса продолжала отображаться поверх поля ввода.
+        if (isConversionCompleted) {
+            celsiusTemperatureTextLabel.setVisible(false);
+            kelvinTemperatureTextLabel.setVisible(false);
+            fahrenheitTemperatureTextLabel.setVisible(false);
+        }
 
         generalTemperaturePanel.removeAll();
 
