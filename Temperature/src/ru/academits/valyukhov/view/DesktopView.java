@@ -9,9 +9,15 @@ import java.awt.*;
 public class DesktopView implements View {
     private Controller controller;
     private JPanel generalTemperaturePanel;
+    private JLabel celsiusLabel;
+    private JLabel kelvinLabel;
+    private JLabel fahrenheitLabel;
     private JTextField celsiusTemperatureField;
     private JTextField kelvinTemperatureField;
     private JTextField fahrenheitTemperatureField;
+    private JLabel celsiusTemperatureTextLabel;
+    private JLabel kelvinTemperatureTextLabel;
+    private JLabel fahrenheitTemperatureTextLabel;
     private boolean isConversionCompleted;
 
     @Override
@@ -30,7 +36,7 @@ public class DesktopView implements View {
 
             JFrame frame = new JFrame("Конвертер температур");
             frame.setSize(500, 500);
-            frame.setResizable(false);
+            // frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
@@ -52,17 +58,17 @@ public class DesktopView implements View {
             generalTemperaturePanel.setSize(frame.getWidth(), frame.getHeight() / 5 * 3);
             generalTemperaturePanel.setBorder(new BorderUIResource.BevelBorderUIResource(0));
 
-            JLabel celsiusLabel = new JLabel("Температура по Цельсию (°C)");
+            celsiusLabel = new JLabel("Температура по Цельсию (°C)");
             generalTemperaturePanel.add(celsiusLabel);
             celsiusTemperatureField = new JTextField();
             generalTemperaturePanel.add(celsiusTemperatureField);
 
-            JLabel kelvinLabel = new JLabel("Температура по Кельвину (К)");
+            kelvinLabel = new JLabel("Температура по Кельвину (К)");
             generalTemperaturePanel.add(kelvinLabel);
             kelvinTemperatureField = new JTextField();
             generalTemperaturePanel.add(kelvinTemperatureField);
 
-            JLabel fahrenheitLabel = new JLabel("Температура по Фаренгейту (°F)");
+            fahrenheitLabel = new JLabel("Температура по Фаренгейту (°F)");
             generalTemperaturePanel.add(fahrenheitLabel);
             fahrenheitTemperatureField = new JTextField();
             generalTemperaturePanel.add(fahrenheitTemperatureField);
@@ -86,21 +92,21 @@ public class DesktopView implements View {
 
             // Отключение невыбранных полей ввода температуры
             celsiusTemperatureField.addCaretListener(s -> {
-                celsiusTemperatureField.setEnabled(true);
-                kelvinTemperatureField.setEnabled(false);
-                fahrenheitTemperatureField.setEnabled(false);
+                // celsiusTemperatureField.setEnabled(true);
+                kelvinTemperatureField.setVisible(false);
+                fahrenheitTemperatureField.setVisible(false);
             });
 
             kelvinTemperatureField.addCaretListener(s -> {
-                celsiusTemperatureField.setEnabled(false);
-                kelvinTemperatureField.setEnabled(true);
-                fahrenheitTemperatureField.setEnabled(false);
+                // celsiusTemperatureField.setEnabled(false);
+                celsiusTemperatureField.setVisible(false);
+                fahrenheitTemperatureField.setVisible(false);
             });
 
             fahrenheitTemperatureField.addCaretListener(s -> {
-                celsiusTemperatureField.setEnabled(false);
-                kelvinTemperatureField.setEnabled(false);
-                fahrenheitTemperatureField.setEnabled(true);
+                // celsiusTemperatureField.setEnabled(false);
+                celsiusTemperatureField.setVisible(false);
+                kelvinTemperatureField.setVisible(false);
             });
 
             convertButton.addActionListener(l -> {
@@ -108,8 +114,16 @@ public class DesktopView implements View {
                     return;
                 }
 
+                if (celsiusTemperatureField.isVisible() && kelvinTemperatureField.isVisible()
+                        && fahrenheitTemperatureField.isVisible()) {
+                    JOptionPane.showMessageDialog(frame, "Выберите температурную шкалу.", "Ошибка",
+                            JOptionPane.ERROR_MESSAGE);
+                    returnToInitialState(tooltipLabel, frame);
+                    return;
+                }
+
                 try {
-                    if (celsiusTemperatureField.isEnabled()) {
+                    if (celsiusTemperatureField.isVisible()) {
                         double celsiusTemperature = Double.parseDouble(celsiusTemperatureField.getText());
 
                         if (celsiusTemperature < -273.15) {
@@ -120,11 +134,11 @@ public class DesktopView implements View {
                             return;
                         }
 
-                        celsiusTemperatureField.setEnabled(false);
+                        celsiusTemperatureField.setText("");
                         setCelsiusTemperature(celsiusTemperature);
                         controller.convertCelsiusToKelvin(celsiusTemperature);
                         controller.convertCelsiusToFahrenheit(celsiusTemperature);
-                    } else if (kelvinTemperatureField.isEnabled()) {
+                    } else if (kelvinTemperatureField.isVisible()) {
                         double kelvinTemperature = Double.parseDouble(kelvinTemperatureField.getText());
 
                         if (kelvinTemperature < 0) {
@@ -135,11 +149,11 @@ public class DesktopView implements View {
                             return;
                         }
 
-                        kelvinTemperatureField.setEnabled(false);
+                        kelvinTemperatureField.setText("");
                         setKelvinTemperature(kelvinTemperature);
                         controller.convertKelvinToCelsius(kelvinTemperature);
                         controller.convertKelvinToFahrenheit(kelvinTemperature);
-                    } else if (fahrenheitTemperatureField.isEnabled()) {
+                    } else if (fahrenheitTemperatureField.isVisible()) {
                         double fahrenheitTemperature = Double.parseDouble(fahrenheitTemperatureField.getText());
 
                         if (fahrenheitTemperature < -459.67) {
@@ -150,7 +164,7 @@ public class DesktopView implements View {
                             return;
                         }
 
-                        fahrenheitTemperatureField.setEnabled(false);
+                        fahrenheitTemperatureField.setText("");
                         setFahrenheitTemperature(fahrenheitTemperature);
                         controller.convertFahrenheitToCelsius(fahrenheitTemperature);
                         controller.convertFahrenheitToKelvin(fahrenheitTemperature);
@@ -176,33 +190,40 @@ public class DesktopView implements View {
     }
 
     private void returnToInitialState(JLabel tooltipLabel, JFrame frame) {
-        generalTemperaturePanel.remove(1);
+        celsiusTemperatureTextLabel.setVisible(false);       // Эти строки написаны для устранения артефактов,
+        kelvinTemperatureTextLabel.setVisible(false);        // т.к. введённая для конвертации температура после конвертации
+        fahrenheitTemperatureTextLabel.setVisible(false);    // и последующего сброса продолжала отображаться поверх поля ввода.
+
+        generalTemperaturePanel.removeAll();
+
+        generalTemperaturePanel.add(celsiusLabel);
         celsiusTemperatureField.setText("");
-        generalTemperaturePanel.add(celsiusTemperatureField, 1);
+        generalTemperaturePanel.add(celsiusTemperatureField);
 
-        generalTemperaturePanel.remove(3);
+        generalTemperaturePanel.add(kelvinLabel);
         kelvinTemperatureField.setText("");
-        generalTemperaturePanel.add(kelvinTemperatureField, 3);
+        generalTemperaturePanel.add(kelvinTemperatureField);
 
-        generalTemperaturePanel.remove(5);
+        generalTemperaturePanel.add(fahrenheitLabel);
         fahrenheitTemperatureField.setText("");
-        generalTemperaturePanel.add(fahrenheitTemperatureField, 5);
+        generalTemperaturePanel.add(fahrenheitTemperatureField);
 
-        celsiusTemperatureField.setEnabled(true);
-        kelvinTemperatureField.setEnabled(true);
-        fahrenheitTemperatureField.setEnabled(true);
+        celsiusTemperatureField.setVisible(true);
+        kelvinTemperatureField.setVisible(true);
+        fahrenheitTemperatureField.setVisible(true);
 
         isConversionCompleted = false;
 
         tooltipLabel.setText("Введите исходную температуру в ячейке соответствующей шкалы");
 
+        generalTemperaturePanel.setVisible(true);
         frame.setVisible(true);    // Для корректного отображения обновлённых элементов
     }
 
     @Override
     public void setCelsiusTemperature(double celsiusTemperature) {
         generalTemperaturePanel.remove(celsiusTemperatureField);
-        JLabel celsiusTemperatureTextLabel = new JLabel(String.format("%4.2f", celsiusTemperature));
+        celsiusTemperatureTextLabel = new JLabel(String.format("%4.2f", celsiusTemperature));
         celsiusTemperatureTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
         generalTemperaturePanel.add(celsiusTemperatureTextLabel, 1);
     }
@@ -210,7 +231,7 @@ public class DesktopView implements View {
     @Override
     public void setKelvinTemperature(double kelvinTemperature) {
         generalTemperaturePanel.remove(kelvinTemperatureField);
-        JLabel kelvinTemperatureTextLabel = new JLabel(String.format("%4.2f", kelvinTemperature));
+        kelvinTemperatureTextLabel = new JLabel(String.format("%4.2f", kelvinTemperature));
         kelvinTemperatureTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
         generalTemperaturePanel.add(kelvinTemperatureTextLabel, 3);
     }
@@ -218,7 +239,7 @@ public class DesktopView implements View {
     @Override
     public void setFahrenheitTemperature(double fahrenheitTemperature) {
         generalTemperaturePanel.remove(fahrenheitTemperatureField);
-        JLabel fahrenheitTemperatureTextLabel = new JLabel(String.format("%4.2f", fahrenheitTemperature));
+        fahrenheitTemperatureTextLabel = new JLabel(String.format("%4.2f", fahrenheitTemperature));
         fahrenheitTemperatureTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
         generalTemperaturePanel.add(fahrenheitTemperatureTextLabel, 5);
     }
