@@ -10,36 +10,33 @@ public class Graph<E> {
 
     public Graph(ArrayList<E> vertexesList, int[][] edgesMatrix) {
         if (vertexesList == null) {
-            throw new NullPointerException("Ошибка! В конструктор в качестве аргумента вместо \"ArrayList<E> vertexesList\""
+            throw new NullPointerException("В конструктор в качестве аргумента вместо \"vertexesList\""
                     + " передан \"null\".");
         }
 
         if (edgesMatrix == null) {
-            throw new NullPointerException("Ошибка! В конструктор в качестве аргумента вместо \"int[][] edgesMatrix\""
+            throw new NullPointerException("В конструктор в качестве аргумента вместо \"edgesMatrix\""
                     + " передан \"null\".");
         }
 
-        if (vertexesList.size() != edgesMatrix.length) {
-            throw new IllegalArgumentException("Ошибка! В конструктор в качестве аргументов переданы список вершин и"
-                    + " матрица рёбер разной размерности.");
+        if (edgesMatrix.length != edgesMatrix[0].length) {
+            throw new IllegalArgumentException("В конструктор передана не квадратная матрица вершин.");
         }
 
-        if (edgesMatrix.length != edgesMatrix[0].length) {
-            throw new IllegalArgumentException("Ошибка! В конструктор передана несимметричная матрица вершин.");
-        }
+        checkVertexesListAndEdgesMatrixDimensionality(vertexesList, edgesMatrix);
 
         this.vertexesList = new ArrayList<>(vertexesList);
-        this.edgesMatrix = Arrays.copyOf(edgesMatrix, edgesMatrix.length);
+        setEdgesMatrix(edgesMatrix);
     }
 
     public Graph(int[][] edgesCoordinates, ArrayList<E> vertexesList) {
         if (edgesCoordinates == null) {
-            throw new NullPointerException("Ошибка! В конструктор в качестве аргумента вместо \"int[][] edgesCoordinates\""
+            throw new NullPointerException("В конструктор в качестве аргумента вместо \"edgesCoordinates\""
                     + " передан \"null\".");
         }
 
         if (vertexesList == null) {
-            throw new NullPointerException("Ошибка! В конструктор в качестве аргумента вместо \"ArrayList<E> vertexesList\""
+            throw new NullPointerException("В конструктор в качестве аргумента вместо \"vertexesList\""
                     + " передан \"null\".");
         }
 
@@ -48,12 +45,12 @@ public class Graph<E> {
 
         for (int[] edge : edgesCoordinates) {
             if (edge.length != 2) {
-                throw new IllegalArgumentException("Ошибка! В конструктор передан список рёбер, содержащий ребро "
+                throw new IllegalArgumentException("В конструктор передан список рёбер, содержащий ребро "
                         + "с количеством координат равным не \"2\", а \"" + edge.length + "\".");
             }
 
             if (edge[0] < 0 || edge[0] >= vertexesList.size() || edge[1] < 0 || edge[1] >= vertexesList.size()) {
-                throw new IllegalArgumentException("Ошибка! В конструктор передан список рёбер, содержащий ребро"
+                throw new IllegalArgumentException("В конструктор передан список рёбер, содержащий ребро"
                         + " с координатами: (" + edge[0] + "; " + edge[1] + "). Значения координат ребра должны быть"
                         + " в диапазоне от \"0\" до \"" + (vertexesList.size() - 1) + "\".");
             }
@@ -69,36 +66,40 @@ public class Graph<E> {
 
     public void setVertexesList(ArrayList<E> vertexesList) {
         if (vertexesList == null) {
-            throw new IllegalArgumentException("Ошибка! В метод в качестве аргумента передан \"null\".");
+            throw new NullPointerException("В метод в качестве аргумента передан \"null\".");
         }
 
-        if (vertexesList.size() != edgesMatrix.length) {
-            throw new IllegalArgumentException("Ошибка! В метод в качестве аргумента передан список вершин с размерностью,"
-                    + " отличной от размерности матрицы рёбер.");
-        }
+        checkVertexesListAndEdgesMatrixDimensionality(vertexesList, edgesMatrix);
 
         this.vertexesList = new ArrayList<>(vertexesList);
     }
 
     public int[][] getEdgesMatrix() {
-        return Arrays.copyOf(edgesMatrix, edgesMatrix.length);
+        int[][] edgesMatrixCopy = new int[edgesMatrix.length][];
+
+        for (int i = 0; i < edgesMatrix.length; i++) {
+            edgesMatrixCopy[i] = Arrays.copyOf(edgesMatrix[i], edgesMatrix.length);
+        }
+
+        return edgesMatrixCopy;
     }
 
     public void setEdgesMatrix(int[][] edgesMatrix) {
         if (edgesMatrix == null) {
-            throw new IllegalArgumentException("Ошибка! В метод в качестве аргумента передан \"null\".");
-        }
-
-        if (vertexesList.size() != edgesMatrix.length) {
-            throw new IllegalArgumentException("Ошибка! В метод в качестве аргумента передана матрица рёбер с размерностью,"
-                    + " отличной от размерности списка вершин.");
+            throw new NullPointerException("В метод в качестве аргумента передан \"null\".");
         }
 
         if (edgesMatrix.length != edgesMatrix[0].length) {
-            throw new IllegalArgumentException("Ошибка! В метод передана несимметричная матрица вершин.");
+            throw new IllegalArgumentException("В метод передана не квадратная матрица вершин.");
         }
 
-        this.edgesMatrix = Arrays.copyOf(edgesMatrix, edgesMatrix.length);
+        checkVertexesListAndEdgesMatrixDimensionality(vertexesList, edgesMatrix);
+
+        this.edgesMatrix = new int[edgesMatrix.length][];
+
+        for (int i = 0; i < edgesMatrix.length; i++) {
+            this.edgesMatrix[i] = Arrays.copyOf(edgesMatrix[i], edgesMatrix.length);
+        }
     }
 
     public int getVertexesQuantity() {
@@ -124,7 +125,7 @@ public class Graph<E> {
 
     public E getVertex(int vertexIndex) {
         if (vertexIndex < 0 || vertexIndex >= vertexesList.size()) {
-            throw new IllegalArgumentException("Ошибка! Попытка передать в метод индекс вершины \"" + vertexIndex + "\". "
+            throw new IndexOutOfBoundsException("Попытка передать в метод индекс вершины \"" + vertexIndex + "\". "
                     + "Допустимые значения: от \"0\" до \"" + (vertexesList.size() - 1) + "\".");
         }
 
@@ -170,15 +171,22 @@ public class Graph<E> {
         return stringBuilder.toString();
     }
 
+    private void checkVertexesListAndEdgesMatrixDimensionality(ArrayList<E> vertexesList, int[][] edgesMatrix) {
+        if (vertexesList.size() != edgesMatrix.length) {
+            throw new IllegalArgumentException("В качестве аргументов переданы список вершин и матрица рёбер разной "
+                    + "размерности (\"" + vertexesList.size() + "\" и \"" + edgesMatrix.length + "\" соответственно).");
+        }
+    }
+
     private boolean checkInputDataForGraphTraversal(int initialVertexIndex, Consumer<E> consumer) {
         if (initialVertexIndex < 0 || initialVertexIndex >= getVertexesQuantity()) {
-            throw new IllegalArgumentException("Обход графа невозможен, т.к. задан неверный индекс начальной вершины "
+            throw new IndexOutOfBoundsException("Обход графа невозможен, т.к. задан неверный индекс начальной вершины "
                     + "для обхода графа. Допускаются значения от \"0\" до \"" + (getVertexesQuantity() - 1) + "\", "
                     + "а задано значение \"" + initialVertexIndex + "\".");
         }
 
         if (consumer == null) {
-            throw new IllegalArgumentException("Обход графа невозможен, т.к. для обхода графа не задан \"Consumer<E> consumer\".");
+            throw new NullPointerException("Обход графа невозможен, т.к. для обхода графа не задан \"consumer\".");
         }
 
         return true;
@@ -188,48 +196,41 @@ public class Graph<E> {
     public void breadthFirstTraversal(int initialVertexIndex, Consumer<E> consumer) {
         checkInputDataForGraphTraversal(initialVertexIndex, consumer);
 
-        ArrayList<Boolean> visitedVertexes = new ArrayList<>(vertexesList.size());
-
-        for (int i = 0; i < vertexesList.size(); i++) {
-            visitedVertexes.add(false);
-        }
+        boolean[] visitedVertexes = new boolean[vertexesList.size()];
 
         int currentVertexIndex = initialVertexIndex;
 
-        int currentVisitedVertexIndex = 0;
+        int firstVertexIndexForNextSubGraph = 0;
 
-        int processedVertexesQuantity = 0;              // Количество обработанных вершин
+        Queue<Integer> vertexIndexesQueue = new LinkedList<>();
 
-        while (processedVertexesQuantity < getVertexesQuantity()) {
-            Queue<Integer> vertexIndexesQueue = new LinkedList<>();
-
+        while (firstVertexIndexForNextSubGraph <= vertexesList.size()) {
             vertexIndexesQueue.offer(currentVertexIndex);
 
             while (!vertexIndexesQueue.isEmpty()) {
                 currentVertexIndex = vertexIndexesQueue.poll();
 
-                consumer.accept(vertexesList.get(currentVertexIndex));
+                if (!visitedVertexes[currentVertexIndex]) {
+                    consumer.accept(vertexesList.get(currentVertexIndex));
 
-                visitedVertexes.set(currentVertexIndex, true);
+                    visitedVertexes[currentVertexIndex] = true;
 
-                processedVertexesQuantity++;
-
-                for (int i = 0; i < getVertexesQuantity(); i++) {
-                    if (edgesMatrix[currentVertexIndex][i] != 0 && !visitedVertexes.get(i)) {
-                        visitedVertexes.set(i, true);
-                        vertexIndexesQueue.offer(i);
+                    for (int i = 0; i < getVertexesQuantity(); i++) {
+                        if (edgesMatrix[currentVertexIndex][i] != 0) {
+                            vertexIndexesQueue.offer(i);
+                        }
                     }
                 }
             }
 
-            if (processedVertexesQuantity < getVertexesQuantity()) {
-                for (int i = currentVisitedVertexIndex; i < getVertexesQuantity(); i++) {
-                    if (!visitedVertexes.get(i)) {
-                        currentVertexIndex = i;
-                        currentVisitedVertexIndex = i + 1;
-                        break;
-                    }
+            for (int i = firstVertexIndexForNextSubGraph; i < vertexesList.size(); i++) {
+                if (!visitedVertexes[i]) {
+                    currentVertexIndex = i;
+                    firstVertexIndexForNextSubGraph = i + 1;
+                    break;
                 }
+
+                firstVertexIndexForNextSubGraph = vertexesList.size() + 1;
             }
         }
     }
@@ -238,62 +239,53 @@ public class Graph<E> {
     public void depthFirstTraversal(int initialVertexIndex, Consumer<E> consumer) {
         checkInputDataForGraphTraversal(initialVertexIndex, consumer);
 
-        ArrayList<Boolean> visitedVertexes = new ArrayList<>(vertexesList.size());
-
-        for (int i = 0; i < vertexesList.size(); i++) {
-            visitedVertexes.add(false);
-        }
+        boolean[] visitedVertexes = new boolean[vertexesList.size()];
 
         int currentVertexIndex = initialVertexIndex;
 
-        int currentVisitedVertexIndex = 0;
+        int firstVertexIndexForNextSubGraph = 0;
 
-        int processedVertexesQuantity = 0;              // Количество обработанных вершин
+        Deque<Integer> vertexIndexesStack = new LinkedList<>();
 
-        while (processedVertexesQuantity < getVertexesQuantity()) {
-            Deque<Integer> vertexIndexesStack = new LinkedList<>();
-
-            vertexIndexesStack.offerFirst(currentVertexIndex);
+        while (firstVertexIndexForNextSubGraph <= vertexesList.size()) {
+            vertexIndexesStack.push(currentVertexIndex);
 
             while (!vertexIndexesStack.isEmpty()) {
-                currentVertexIndex = vertexIndexesStack.pollFirst();
+                currentVertexIndex = vertexIndexesStack.pop();
 
-                if (!visitedVertexes.get(currentVertexIndex)) {
+                if (!visitedVertexes[currentVertexIndex]) {
                     consumer.accept(vertexesList.get(currentVertexIndex));
-                    visitedVertexes.set(currentVertexIndex, true);
-                    processedVertexesQuantity++;
-                }
+                    visitedVertexes[currentVertexIndex] = true;
 
-                for (int i = 0; i < getVertexesQuantity(); i++) {
-                    if (edgesMatrix[currentVertexIndex][i] != 0 && !visitedVertexes.get(i)) {
-                        vertexIndexesStack.offerFirst(currentVertexIndex);
-                        vertexIndexesStack.offerFirst(i);
-                        break;
+                    for (int i = vertexesList.size() - 1; i >= 0; i--) {
+                        if (edgesMatrix[currentVertexIndex][i] != 0 && !visitedVertexes[i]) {
+                            vertexIndexesStack.push(i);
+                        }
                     }
                 }
             }
 
-            if (processedVertexesQuantity < getVertexesQuantity()) {
-                for (int i = currentVisitedVertexIndex; i < getVertexesQuantity(); i++) {
-                    if (!visitedVertexes.get(i)) {
-                        currentVertexIndex = i;
-                        currentVisitedVertexIndex = i + 1;
-                        break;
-                    }
+            for (int i = firstVertexIndexForNextSubGraph; i < vertexesList.size(); i++) {
+                if (!visitedVertexes[i]) {
+                    currentVertexIndex = i;
+                    firstVertexIndexForNextSubGraph = i + 1;
+                    break;
                 }
+
+                firstVertexIndexForNextSubGraph = vertexesList.size() + 1;
             }
         }
     }
 
-    // Вспомогательный метод обхода графа в глубину с рекурсией (для последующего заполнения списка "visitedVertexes" значениями "false").
-    private void DepthFirstTraversalWithRecursion(int initialVertexIndex, Consumer<E> consumer, ArrayList<Boolean> visitedVertexes) {
+    // Вспомогательный метод обхода графа в глубину с рекурсией.
+    private void depthFirstTraversalWithRecursion(int initialVertexIndex, Consumer<E> consumer, boolean[] visitedVertexes) {
         consumer.accept(vertexesList.get(initialVertexIndex));
 
-        visitedVertexes.set(initialVertexIndex, true);
+        visitedVertexes[initialVertexIndex] = true;
 
-        for (int i = 0; i < getVertexesQuantity(); i++) {
-            if (edgesMatrix[initialVertexIndex][i] != 0 && !visitedVertexes.get(i)) {
-                DepthFirstTraversalWithRecursion(i, consumer, visitedVertexes);
+        for (int i = 0; i < vertexesList.size(); i++) {
+            if (edgesMatrix[initialVertexIndex][i] != 0 && !visitedVertexes[i]) {
+                depthFirstTraversalWithRecursion(i, consumer, visitedVertexes);
             }
         }
     }
@@ -302,17 +294,13 @@ public class Graph<E> {
     public void depthFirstTraversalWithRecursion(int initialVertexIndex, Consumer<E> consumer) {
         checkInputDataForGraphTraversal(initialVertexIndex, consumer);
 
-        ArrayList<Boolean> visitedVertexes = new ArrayList<>(vertexesList.size());
+        boolean[] visitedVertexes = new boolean[vertexesList.size()];
 
-        for (int i = 0; i < vertexesList.size(); i++) {
-            visitedVertexes.add(false);
-        }
+        depthFirstTraversalWithRecursion(initialVertexIndex, consumer, visitedVertexes);
 
-        DepthFirstTraversalWithRecursion(initialVertexIndex, consumer, visitedVertexes);
-
-        for (int i = 0; i < visitedVertexes.size(); i++) {
-            if (!visitedVertexes.get(i)) {
-                DepthFirstTraversalWithRecursion(i, consumer, visitedVertexes);
+        for (int i = 0; i < visitedVertexes.length; i++) {
+            if (!visitedVertexes[i]) {
+                depthFirstTraversalWithRecursion(i, consumer, visitedVertexes);
             }
         }
     }
